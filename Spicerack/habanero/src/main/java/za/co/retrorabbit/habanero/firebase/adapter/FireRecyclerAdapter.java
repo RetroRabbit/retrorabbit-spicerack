@@ -1,5 +1,6 @@
 package za.co.retrorabbit.habanero.firebase.adapter;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,13 @@ import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
  * Created by Werner Scheffer on 2016/09/15.
  */
 public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> implements Filterable {
+
+    protected static final int TYPE_HEADER = -2;
+    protected static final int TYPE_FOOTER = -3;
+    protected static final int TYPE_SUB_HEADER = -4;
+
+    private boolean showFooter = false, showHeader = false, showSubHeader = false;
+
     Query mQuery;
     Class<T> mModelClass;
     int mModelLayout;
@@ -29,6 +37,8 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     boolean scrollTo;
     String scrollToKey;
     RecyclerView recyclerView;
+    Handler filterHandler;
+    Runnable filterRunnable;
 
     public FireRecyclerAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, Query mQuery) {
         this.mModelClass = mModelClass;
@@ -45,29 +55,118 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        try {
-            Constructor<VH> constructor = mViewHolderClass.getConstructor(View.class);
-            return constructor.newInstance(view);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+        VH viewHolder;
+        if (isHeaderType(viewType)) {
+            viewHolder = onCreateHeaderViewHolder(parent, viewType);
+        } else if (isSubHeaderType(viewType)) {
+            viewHolder = onCreateSubHeaderViewHolder(parent, viewType);
+        } else if (isFooterType(viewType)) {
+            viewHolder = onCreateFooterViewHolder(parent, viewType);
+        } else {
+            viewHolder = onCreateItemViewHolder(parent, viewType);
         }
+        return viewHolder;
+
+
+    }
+
+    /**
+     * If you don't need header feature, you can bypass overriding this method.
+     */
+    protected VH onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    protected VH onCreateSubHeaderViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    protected abstract VH onCreateItemViewHolder(ViewGroup parent, int viewType);
+
+    /**
+     * If you don't need footer feature, you can bypass overriding this method.
+     */
+    protected VH onCreateFooterViewHolder(ViewGroup parent, int viewType) {
+        return null;
     }
 
     @Override
-    public final void onBindViewHolder(VH viewHolder, int position) {
-        populateViewHolder(viewHolder, getItem(position), position);
+    public final void onBindViewHolder(VH holder, int position) {
+        if (isHeaderPosition(position)) {
+            onBindHeaderViewHolder(holder, position);
+        } else if (isSubHeaderPosition(position)) {
+            onBindSubHeaderViewHolder(holder, position);
+        } else if (isFooterPosition(position)) {
+            onBindFooterViewHolder(holder, position);
+        } else {
+            onBindItemViewHolder(holder, getItem(position), position);
+        }
+    }
+
+    /**
+     * If you don't need header feature, you can bypass overriding this method.
+     */
+    protected void onBindHeaderViewHolder(VH holder, int position) {
+    }
+
+    /**
+     * If you don't need sub header feature, you can bypass overriding this method.
+     */
+    protected void onBindSubHeaderViewHolder(VH holder, int position) {
+    }
+
+    protected abstract void onBindItemViewHolder(VH holder, T model, int position);
+
+    /**
+     * If you don't need footer feature, you can bypass overriding this method.
+     */
+    protected void onBindFooterViewHolder(VH holder, int position) {
+    }
+
+    /**
+     * Invokes onHeaderViewRecycled, onItemViewRecycled or onFooterViewRecycled methods based
+     * on the holder.getAdapterPosition()
+     */
+    @Override
+    public final void onViewRecycled(VH holder) {
+        int position = holder.getAdapterPosition();
+
+        if (isHeaderPosition(position)) {
+            onHeaderViewRecycled(holder);
+        } else if (isSubHeaderPosition(position)) {
+            onSubHeaderViewRecycled(holder);
+        } else if (isFooterPosition(position)) {
+            onFooterViewRecycled(holder);
+        } else {
+            onItemViewRecycled(holder);
+        }
+    }
+
+    protected void onHeaderViewRecycled(VH holder) {
+    }
+
+    protected void onSubHeaderViewRecycled(VH holder) {
+    }
+
+    protected void onItemViewRecycled(VH holder) {
+    }
+
+    protected void onFooterViewRecycled(VH holder) {
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        int size = mData.size();
+        if (showHeader) {
+            size++;
+        }
+        if (showSubHeader) {
+            size++;
+        }
+        if (showFooter) {
+            size++;
+        }
+        return size;
     }
 
     @Override
@@ -83,7 +182,15 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return mModelLayout;
+        int viewType = mModelLayout;
+        if (isHeaderPosition(position)) {
+            viewType = TYPE_HEADER;
+        } else if (isSubHeaderPosition(position)) {
+            viewType = TYPE_SUB_HEADER;
+        } else if (isFooterPosition(position)) {
+            viewType = TYPE_FOOTER;
+        }
+        return viewType;
     }
 
     @Override
@@ -101,17 +208,128 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public T getItem(int position) {
+        if (showHeader && hasItems()) {
+            --position;
+        }
+        if (showSubHeader && hasItems()) {
+            --position;
+        }
+
         return mData.getItem(position);
     }
 
-    protected abstract void populateViewHolder(VH viewHolder, T model, int position);
+    /**
+     * Call this method to show/hide header.
+     */
+    public void showHeader(boolean value) {
+        this.showHeader = value;
 
-    public void filterSnapshots() {
-        getFilter().filter(getFilterConstraint());
+        if (!this.showHeader)
+            notifyItemRemoved(0);
+        else
+            notifyItemInserted(0);
+        // notifyDataSetChanged();
     }
 
-    public int getItemPosition(String key) {
-        return getData().indexOf(key);
+    /**
+     * Call this method to show/hide sub header.
+     */
+    public void showSubHeader(boolean value) {
+        this.showSubHeader = value;
+
+        if (!this.showSubHeader) {
+            if (!this.showHeader)
+                notifyItemRemoved(0);
+            else
+                notifyItemRemoved(1);
+        } else {
+            if (!this.showHeader)
+                notifyItemInserted(0);
+            else
+                notifyItemInserted(1);
+        }
+    }
+
+    /**
+     * Call this method to show/hide footer.
+     */
+    public void showFooter(boolean value) {
+        this.showFooter = value;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Returns true if the position type parameter passed as argument is equals to 0 and the adapter
+     * has a not null header already configured.
+     */
+    public boolean isHeaderPosition(int position) {
+        return showHeader && position == 0;
+    }
+
+    /*
+     * Returns true if the position type parameter passed as argument is equals to
+     * <code>getItemCount() - 1</code>
+     * and the adapter has a not null header already configured.
+     */
+    public boolean isSubHeaderPosition(int position) {
+        if (showHeader) {
+            return showSubHeader && position == 1;
+        } else {
+            return showSubHeader && position == 0;
+        }
+    }
+
+    /**
+     * Returns true if the position type parameter passed as argument is equals to
+     * <code>getItemCount() - 1</code>
+     * and the adapter has a not null header already configured.
+     */
+    public boolean isFooterPosition(int position) {
+        int lastPosition = getItemCount() - 1;
+        return showFooter && position == lastPosition;
+    }
+
+    /**
+     * Returns true if the view type parameter passed as argument is equals to TYPE_HEADER.
+     */
+    protected boolean isHeaderType(int viewType) {
+        return viewType == TYPE_HEADER;
+    }
+
+    /**
+     * Returns true if the view type parameter passed as argument is equals to TYPE_HEADER.
+     */
+    protected boolean isSubHeaderType(int viewType) {
+        return viewType == TYPE_SUB_HEADER;
+    }
+
+    /**
+     * Returns true if the view type parameter passed as argument is equals to TYPE_FOOTER.
+     */
+    protected boolean isFooterType(int viewType) {
+        return viewType == TYPE_FOOTER;
+    }
+
+    /**
+     * Returns true if the item configured is not empty.
+     */
+    private boolean hasItems() {
+        return mData.size() > 0;
+    }
+
+    protected void filterSnapshots() {
+        if (filterHandler == null)
+            filterHandler = new Handler();
+        if (filterRunnable == null) {
+            filterRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    getFilter().filter(getFilterConstraint());
+                }
+            };
+        }
+        filterHandler.removeCallbacks(filterRunnable);
+        filterHandler.postDelayed(filterRunnable, 300);
     }
 
     public void setFilteredMap(ArrayList<String> filteredMap) {
