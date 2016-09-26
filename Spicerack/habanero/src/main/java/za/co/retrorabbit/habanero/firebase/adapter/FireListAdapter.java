@@ -49,8 +49,8 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         this(mModelClass, mModelLayout, mViewHolderClass, (Query) mReference);
     }
 
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+    public VH onCreateViewHolder(ViewGroup parent, int viewResource) {
+        ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewResource, parent, false);
         try {
             Constructor<VH> constructor = mViewHolderClass.getConstructor(View.class);
             return constructor.newInstance(view);
@@ -87,7 +87,7 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     public final View getView(int position, View convertView, ViewGroup parent) {
         VH viewHolder;
         if (convertView == null) {
-            viewHolder = onCreateViewHolder(parent, getItemViewType(position));
+            viewHolder = onCreateViewHolder(parent, getItemViewResource(position));
             convertView = viewHolder.itemView;
             convertView.setTag(viewHolder);
         } else {
@@ -98,9 +98,13 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         return convertView;
     }
 
+    public int getItemViewResource(int position) {
+        return mModelLayout;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        return mModelLayout;
+        return 1;
     }
 
     @Override
