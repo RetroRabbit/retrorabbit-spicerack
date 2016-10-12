@@ -1,6 +1,7 @@
 package za.co.retrorabbit.habanero.firebase.helpers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Pair;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,17 +19,17 @@ import java.util.List;
 public class FirebaseTaskQueue<T> {
     private DatabaseReference databaseReference;
     private ArrayList<Pair<List<T>, HashMap<String, Object>>> dataSet;
-    private OnCompleteListener<Void> onCompleteListener;
+    private OnCompleteListener onCompleteListener;
     private OnNextListener<T> onNextListener;
     private HashSet<Integer> dataSetCompletionList;
 
     private void queueTasks(final int index) {
-        databaseReference.updateChildren(dataSet.get(index).second).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.updateChildren(dataSet.get(index).second).addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
                 if (onNextListener != null) {
                     NextTask<T> nextTask = new NextTask<T>(dataSet.get(index).first);
-                    onNextListener.onNext(nextTask).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    onNextListener.onNext(nextTask).addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             setComplete(index, task);
@@ -57,7 +58,7 @@ public class FirebaseTaskQueue<T> {
         dataSet.add(new Pair<>(data, uploadMap));
     }
 
-    public void setOnCompleteListener(OnCompleteListener<Void> onCompleteListener) {
+    public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
         this.onCompleteListener = onCompleteListener;
     }
 
@@ -65,6 +66,10 @@ public class FirebaseTaskQueue<T> {
         this.databaseReference = databaseReference;
         this.onNextListener = onNextListener;
 
+        if (dataSet == null || dataSet.size() == 0) {
+            onCompleteListener.onComplete(null);
+            return;
+        }
         for (int i = 0; i < dataSet.size(); i++) {
             queueTasks(i);
         }
@@ -74,8 +79,15 @@ public class FirebaseTaskQueue<T> {
         Task<Void> onNext(@NonNull NextTask<T> task);
     }
 
+    public interface OnCompleteListener {
+        void onComplete(@Nullable Task<Void> task);
+    }
+
     public static class NextTask<T> {
         List<T> result;
+
+        protected NextTask() {
+        }
 
         NextTask(List<T> result) {
             this.result = result;
