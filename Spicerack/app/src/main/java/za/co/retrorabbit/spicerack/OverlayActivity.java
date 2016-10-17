@@ -49,8 +49,7 @@ public class OverlayActivity extends AppCompatActivity {
 
         HelpOverlay.Builder.start(this)
                 .setConfiguration(configuration)
-                .setTarget(v)
                 .setUsageId("intro_card") //THIS SHOULD BE UNIQUE ID
-                .show();
+                .show(v);
     }
 }
