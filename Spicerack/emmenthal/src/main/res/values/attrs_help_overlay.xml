@@ -1,0 +1,17 @@
+<resources>
+    <declare-styleable name="HelpOverlay">
+        <attr name="eho_overlayColor" format="color" /> <!--argb(0,0,0,127)-->
+        <attr name="eho_overlayCutoutColor" format="color" /> <!--Color.Transparent-->
+        <attr name="eho_overlayDotColor" format="color" /> <!--Color.White-->
+        <attr name="eho_buttonLeftColor" format="color" /> <!--colorAccent-->
+        <attr name="eho_buttonRightColor" format="color" /> <!--colorAccent-->
+        <attr name="eho_titleTextColor" format="color" /> <!--24dp-->
+        <attr name="eho_titleMessageTextColor" format="color" /> <!--18dp-->
+        <attr name="eho_titleTextSize" format="dimension" /> <!--24dp-->
+        <attr name="eho_titleMessageTextSize" format="dimension" /> <!--18dp-->
+        <attr name="eho_dotSize" format="integer" /> <!--55-->
+        <attr name="eho_delayMillis" format="integer" /> <!--0-->
+        <attr name="eho_fadeCuration" format="integer" /> <!--700-->
+        <attr name="eho_targetPadding" format="integer" /> <!--10-->
+    </declare-styleable>
+</resources>
