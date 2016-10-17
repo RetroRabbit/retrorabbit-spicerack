@@ -43,3 +43,4 @@ cache:
         - $HOME/ve
 script:
     cd $TRAVIS_BUILD_DIR/Spicerack
+    ./gradlew assembleRelease
