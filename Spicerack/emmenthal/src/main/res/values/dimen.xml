@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="titleTextSize">15dp</dimen>
+    <dimen name="titleMessageTextSize">15dp</dimen>
+    <dimen name="overlay_margin_end">20dp</dimen>
+    <dimen name="overlay_margin_start">20dp</dimen>
+
+    <dimen name="k_font_xx_large">42sp</dimen>
+    <dimen name="k_font_extra_large">21sp</dimen>
+    <dimen name="k_font_large">18sp</dimen>
+    <dimen name="k_font_medium">15sp</dimen>
+    <dimen name="k_font_small">12sp</dimen>
+    <dimen name="k_font_extra_small">8sp</dimen>
+</resources>

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Spicerack.iml" filepath="$PROJECT_DIR$/Spicerack.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/emmenthal/emmenthal.iml" filepath="$PROJECT_DIR$/emmenthal/emmenthal.iml" />
       <module fileurl="file://$PROJECT_DIR$/habanero/habanero.iml" filepath="$PROJECT_DIR$/habanero/habanero.iml" />
       <module fileurl="file://$PROJECT_DIR$/salt/salt.iml" filepath="$PROJECT_DIR$/salt/salt.iml" />
     </modules>

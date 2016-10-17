@@ -1,1 +1,1 @@
-include ':app', ':habanero', ':salt'
+include ':app', ':habanero', ':salt', ':emmenthal'
