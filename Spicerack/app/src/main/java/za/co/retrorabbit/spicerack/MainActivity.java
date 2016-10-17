@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import co.za.retrorabbit.emmenthal.HelpOverlay;
+import co.za.retrorabbit.emmenthal.shape.Focus;
+import co.za.retrorabbit.emmenthal.shape.FocusGravity;
+import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
+import co.za.retrorabbit.emmenthal.utils.Utils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

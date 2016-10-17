@@ -13,9 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.annotation.StyleRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -648,6 +650,7 @@ public class HelpOverlay extends ConstraintLayout {
         private HelpOverlay materialIntroView;
 
         private Activity activity;
+        private int targetId;
 
         private Builder(Activity activity) {
             this.activity = activity;
@@ -683,18 +686,28 @@ public class HelpOverlay extends ConstraintLayout {
             return materialIntroView;
         }
 
-        public HelpOverlay show() {
+        public Builder setUsageId(String usageId) {
+            materialIntroView.setUsageId(usageId);
+            return this;
+        }
+
+        public HelpOverlay show(View view) {
+            materialIntroView.setTarget(new ViewTarget(view));
             build().show(activity);
             return materialIntroView;
         }
 
-        public Builder setTarget(View view) {
-            materialIntroView.setTarget(new ViewTarget(view));
-            return this;
-        }
-
-        public Builder setUsageId(String usageId) {
-            materialIntroView.setUsageId(usageId);
+        public Builder show(@IdRes final int resId, final RecyclerView recyclerView, final int position) {
+            recyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    super.onItemRangeInserted(positionStart, itemCount);
+                    if (positionStart == position && recyclerView.findViewHolderForAdapterPosition(positionStart).itemView.findViewById(resId) != null) {
+                        materialIntroView.setTarget(new ViewTarget(recyclerView.findViewHolderForAdapterPosition(positionStart).itemView.findViewById(resId)));
+                        build().show(activity);
+                    }
+                }
+            });
             return this;
         }
     }
