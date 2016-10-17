@@ -1,0 +1,42 @@
+language: android
+dist: precise
+
+jdk:
+  - oraclejdk8
+
+sudo: required
+
+#services:
+#  - docker
+
+env:
+  matrix:
+    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_TARGET=android-24 ANDROID_ABI=x86
+  global:
+    # wait up to 10 minutes for adb to connect to emulator
+    - ADB_INSTALL_TIMEOUT=20
+
+android:
+    components:
+        - tools
+        - build-tools-24.0.3
+        - android-24
+        - extra-google-google_play_services
+        - extra-google-m2repository
+        - extra-android-m2repository
+        #- sys-img-armeabi-v7a-android-24
+
+    licenses:
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
+
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+    bundler: true
+    directories:
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
+        - node_modules
+        - $HOME/ve
