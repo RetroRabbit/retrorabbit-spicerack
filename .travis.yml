@@ -42,7 +42,8 @@ cache:
         - node_modules
         - $HOME/ve
 before_script:
-    - sudo chmod +x $ANDROID_SDK
+    - sudo cd $ANDROID_SDK
+    - sudo chmod 755 $ANDROID_SDK
      
 script:
     cd $TRAVIS_BUILD_DIR/Spicerack
