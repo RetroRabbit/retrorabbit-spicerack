@@ -42,4 +42,4 @@ cache:
         - node_modules
         - $HOME/ve     
 script: 
-    ./gradlew assembleRelease
+    sudo ./gradlew assembleRelease

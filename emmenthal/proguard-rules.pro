@@ -15,3 +15,20 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontpreverify
+-ignorewarnings
+-repackageclasses ''
+-allowaccessmodification
+-overloadaggressively
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes SourceFile,LineNumberTable
+-flattenpackagehierarchy ''
+
+-keepclassmembers class co.za.retrorabbit.emmenthal.** {
+    *;
+}
+-keepclassmembers class **.R$* {
+   public static <fields>;
+}
