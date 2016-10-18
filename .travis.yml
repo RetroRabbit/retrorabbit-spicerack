@@ -42,5 +42,4 @@ cache:
         - node_modules
         - $HOME/ve     
 script:
-    cd RetroRabbit/retrorabbit-spicerack
-    sudo ./gradlew assembleRelease
+  ./gradlew assembleRelease
