@@ -40,6 +40,8 @@ cache:
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
         - node_modules
-        - $HOME/ve     
+        - $HOME/ve
+before_install:
+ - sudo chmod +x gradlew
 script:
   ./gradlew assembleRelease
