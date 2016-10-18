@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/info_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@color/overlayBackground">
+
+    <Button
+        android:id="@+id/button_right"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_left"
+        android:layout_alignBottom="@+id/button_left"
+        android:layout_toEndOf="@+id/button_left"
+        android:text="Read More" />
+
+    <TextView
+        android:id="@+id/textview_title"
+        style="@style/AppTheme.TextView.Medium.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:text="Help Overlay"
+        android:textColor="@color/overlayTitleColor" />
+
+    <TextView
+        android:id="@+id/textview_message"
+        style="@style/AppTheme.TextView.Light.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textview_title"
+        android:layout_alignStart="@+id/textview_title"
+        android:layout_below="@+id/textview_title"
+        android:text="Remember to the the message text"
+        android:textColor="@color/overlayMessageColor" />
+
+    <Button
+        android:id="@+id/button_left"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textview_message"
+        android:layout_below="@+id/textview_message"
+        android:text="Ok" />
+
+</RelativeLayout>
