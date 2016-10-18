@@ -42,7 +42,6 @@ cache:
         - node_modules
         - $HOME/ve
 before_script:
-    - sudo cd $ANDROID_SDK
     - sudo chmod 755 $ANDROID_SDK
      
 script:
