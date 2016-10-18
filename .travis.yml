@@ -42,7 +42,6 @@ cache:
         - node_modules
         - $HOME/ve
 before_script:
-    - sudo chmod +x gradlew
     - sudo chmod +x $ANDROID_SDK
      
 script:
