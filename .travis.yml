@@ -45,6 +45,7 @@ before_install:
   - sudo mkdir $ANDROID_HOME/licenses
   - sudo touch "$ANDROID_HOME/licenses/android-sdk-license"
   - sudo bash -c 'sudo echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" >> "$ANDROID_HOME/licenses/android-sdk-license"'
+  - sudo chmod +x gradlew
 script:
   sudo chmod +x gradlew
   ./gradlew assembleRelease
