@@ -21,7 +21,6 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     protected static final int TYPE_HEADER = -2;
     protected static final int TYPE_FOOTER = -3;
     protected static final int TYPE_SUB_HEADER = -4;
-    Query mQuery;
     Class<T> mModelClass;
     int mModelLayout;
     Class<VH> mViewHolderClass;
@@ -39,13 +38,17 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public FireRecyclerAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, Query mQuery) {
+        this(mModelClass, mModelLayout, mViewHolderClass, new FireHashSet<>(mQuery, mModelClass));
+    }
+
+    public FireRecyclerAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, FireHashSet mData) {
         this.mModelClass = mModelClass;
         this.mModelLayout = mModelLayout;
         this.mViewHolderClass = mViewHolderClass;
-        this.mQuery = mQuery;
-        mData = new FireHashSet<>(mQuery, this.mModelClass);
+        this.mData = mData;
         addListeners();
     }
+
 
     public void addListeners() {
         mData.setOnChangedListener(new FireHashSet.OnChangedListener() {

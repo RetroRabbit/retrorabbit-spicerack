@@ -27,7 +27,6 @@ import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
  * Created by wsche on 2016/09/15.
  */
 public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> extends BaseAdapter implements Filterable, SectionIndexer {
-    Query mQuery;
     Class<T> mModelClass;
     int mModelLayout;
     Class<VH> mViewHolderClass;
@@ -36,13 +35,16 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     Map<String, Integer> indicatorMap = new LinkedHashMap<>();
     String[] sections = new String[]{};
 
-    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, Query mQuery) {
+    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, FireHashSet mData) {
         this.mModelClass = mModelClass;
         this.mModelLayout = mModelLayout;
         this.mViewHolderClass = mViewHolderClass;
-        this.mQuery = mQuery;
-        mData = new FireHashSet<>(mQuery, this.mModelClass);
+        this.mData = mData;
         addListeners();
+    }
+
+    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, Query mQuery) {
+        this(mModelClass, mModelLayout, mViewHolderClass, new FireHashSet(mQuery, mModelClass));
     }
 
     public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, DatabaseReference mReference) {
