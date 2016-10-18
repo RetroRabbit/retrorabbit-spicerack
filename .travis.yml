@@ -41,6 +41,5 @@ cache:
         - $HOME/.gradle/wrapper/
         - node_modules
         - $HOME/ve     
-script:
-    cd $TRAVIS_BUILD_DIR/Spicerack
+script: 
     ./gradlew assembleRelease
