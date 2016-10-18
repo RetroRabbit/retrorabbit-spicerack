@@ -126,11 +126,6 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         return mData.getItem(position);
     }
 
-    public void setFilterConstraint(String filterConstraint) {
-        this.filterConstraint = filterConstraint;
-        filterSnapshots();
-    }
-
     protected abstract void populateViewHolder(VH viewHolder, T model, int position);
 
     public void filterSnapshots() {
@@ -193,6 +188,11 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
 
     public String getFilterConstraint() {
         return filterConstraint;
+    }
+
+    public void setFilterConstraint(String filterConstraint) {
+        this.filterConstraint = filterConstraint;
+        filterSnapshots();
     }
 
     @Override

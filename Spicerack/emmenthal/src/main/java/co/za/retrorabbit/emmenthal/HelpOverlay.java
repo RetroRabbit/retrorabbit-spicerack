@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.StyleRes;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import co.za.retrorabbit.emmenthal.animation.AnimationFactory;
@@ -42,7 +42,7 @@ import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
 /**
  * TODO: document your custom view class.
  */
-public class HelpOverlay extends ConstraintLayout {
+public class HelpOverlay extends RelativeLayout {
 
     /**
      * Configuration to use for Overlay
@@ -98,7 +98,7 @@ public class HelpOverlay extends ConstraintLayout {
     /**
      * Help Dialog view
      */
-    private ConstraintLayout infoLayout;
+    private RelativeLayout infoLayout;
 
     /**
      * Help Overlay Title Text
@@ -189,7 +189,7 @@ public class HelpOverlay extends ConstraintLayout {
         setVisibility(INVISIBLE);
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.help_overlay, null);
-        infoLayout = (ConstraintLayout) view.findViewById(R.id.info_layout);
+        infoLayout = (RelativeLayout) view.findViewById(R.id.info_layout);
         textViewTitle = (TextView) view.findViewById(R.id.textview_title);
         textViewMessage = (TextView) view.findViewById(R.id.textview_message);
         buttonLeft = (Button) view.findViewById(R.id.button_left);
@@ -484,23 +484,23 @@ public class HelpOverlay extends ConstraintLayout {
                 if (infoLayout.getParent() != null)
                     ((ViewGroup) infoLayout.getParent()).removeView(infoLayout);
 
-                ConstraintLayout.LayoutParams infoDialogParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams infoDialogParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 //Top Half
                 if (circleShape.getPoint().y < height / 2) {
-                    infoDialogParams.topToBottom = R.id.dotView;
+                    infoDialogParams.addRule(RelativeLayout.BELOW, R.id.dotView);
                     infoDialogParams.setMargins(
                             0,
                             circleShapeStroke.getRadius() - (dotView.getLayoutParams().height / 2) + configuration.getInfoMargin(),
                             0,
                             0);
                 } else {
-                    infoDialogParams.bottomToTop = R.id.dotView;
+                    infoDialogParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.dotView);
                     infoDialogParams.setMargins(
                             0,
                             0,
                             0,
-                            circleShapeStroke.getRadius() - (dotView.getLayoutParams().height / 2) + configuration.getInfoMargin());
+                            circleShapeStroke.getRadius() + (dotView.getLayoutParams().height / 2) + configuration.getInfoMargin());
                 }
 
 
@@ -524,9 +524,9 @@ public class HelpOverlay extends ConstraintLayout {
                 if (dotView.getParent() != null)
                     ((ViewGroup) dotView.getParent()).removeView(dotView);
 
-                ConstraintLayout.LayoutParams dotViewLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                dotViewLayoutParams.topToTop = LayoutParams.PARENT_ID;
-                dotViewLayoutParams.startToStart = LayoutParams.PARENT_ID;
+                RelativeLayout.LayoutParams dotViewLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+
                 dotViewLayoutParams.height = configuration.getDotSize();
                 dotViewLayoutParams.width = configuration.getDotSize();
                 dotViewLayoutParams.setMargins(

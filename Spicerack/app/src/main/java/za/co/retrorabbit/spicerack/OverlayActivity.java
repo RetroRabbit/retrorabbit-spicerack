@@ -31,7 +31,7 @@ public class OverlayActivity extends AppCompatActivity {
                 .setFadeAnimationEnabled(true)
                 .setClickTargetOnTouch(false)
                 .setDismissOnTouch(true)
-                .setDotViewEnabled(false)
+                .setDotViewEnabled(true)
                 .setTitleStyle(R.style.AppTheme_TextView_Medium_Medium)
                 .setMessageStyle(R.style.AppTheme_TextView_Light_Medium)
                 .setDotSize(Utils.getDimention(this,R.dimen.dotSize))

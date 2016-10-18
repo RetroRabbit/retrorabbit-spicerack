@@ -22,6 +22,7 @@ public class FireHashSet<T> implements ChildEventListener {
     private Query mQuery;
     private OnChangedListener mListener;
     private FilterableIndexedHashMap<String, T> mObjects;
+
     public FireHashSet(Query mQuery, Class<T> mModelClass) {
         this.mQuery = mQuery;
         this.mModelClass = mModelClass;
@@ -42,7 +43,7 @@ public class FireHashSet<T> implements ChildEventListener {
         return mQuery;
     }
 
-    public DatabaseReference getReference(){
+    public DatabaseReference getReference() {
         return getQuery().getRef();
     }
 

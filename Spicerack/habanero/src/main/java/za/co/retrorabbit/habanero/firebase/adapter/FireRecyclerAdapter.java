@@ -115,13 +115,13 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         return filterConstraint;
     }
 
-    public Filter customFilter() {
-        return null;
-    }
-
     public void setFilterConstraint(String filterConstraint) {
         this.filterConstraint = filterConstraint;
         filterSnapshots();
+    }
+
+    public Filter customFilter() {
+        return null;
     }
 
     @Override
