@@ -41,10 +41,9 @@ cache:
         - $HOME/.gradle/wrapper/
         - node_modules
         - $HOME/ve
-before_install:
-  - sudo mkdir $ANDROID_HOME/licenses
-  - sudo touch "$ANDROID_HOME/licenses/android-sdk-license"
-  - sudo bash -c 'sudo echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" >> "$ANDROID_HOME/licenses/android-sdk-license"'
-  - sudo chmod +x gradlew
+before_script:
+    - sudo chmod 755 $ANDROID_SDK
+     
 script:
-  ./gradlew assembleRelease
+    cd $TRAVIS_BUILD_DIR/Spicerack
+    ./gradlew assembleRelease
