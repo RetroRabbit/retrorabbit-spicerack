@@ -40,10 +40,7 @@ cache:
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
         - node_modules
-        - $HOME/ve
-before_script:
-    - sudo chmod 755 $ANDROID_SDK
-     
+        - $HOME/ve     
 script:
     cd $TRAVIS_BUILD_DIR/Spicerack
     ./gradlew assembleRelease
