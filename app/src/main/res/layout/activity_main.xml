@@ -5,14 +5,36 @@
     android:id="@+id/activity_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="za.co.retrorabbit.spicerack.OverlayActivity">
+    tools:context="za.co.retrorabbit.spicerack.StaticOverlayActivity">
 
-    <Button
-        android:id="@+id/button_emmenthal"
+    <TextView
+        android:text="Overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:onClick="previewEmmenthal"
-        android:text="Preview\nOverlay" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView"
+        android:textAppearance="@style/AppTheme.TextView.Light.Large"
+        android:textColor="@color/blue_grey_900"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/button_emmenthal_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="previewEmmenthalList"
+        android:text="Preview\nList Overlay"
+        android:layout_alignBaseline="@+id/button_emmenthal_static"
+        android:layout_alignBottom="@+id/button_emmenthal_static"
+        android:layout_toEndOf="@+id/button_emmenthal_static" />
+
+    <Button
+        android:id="@+id/button_emmenthal_static"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="previewEmmenthalStatic"
+        android:text="Preview\nStatic Overlay"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
 </RelativeLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_frame"
+    android:layout_width="match_parent"
+    android:background="@color/red_50"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/imageview_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/common_google_signin_btn_icon_light_normal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/amber_a700" />
+
+        <TextView
+            android:id="@+id/textview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/imageview_item"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/imageview_item"
+            android:text="TextView"
+            android:textAppearance="@style/AppTheme.TextView.Light.Medium"
+            android:textColor="@color/blue_grey_900" />
+
+        <TextView
+            android:id="@+id/textview_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textview_title"
+            android:layout_toEndOf="@+id/imageview_item"
+            android:text="TextView"
+            android:textAppearance="@style/AppTheme.TextView.Light.Small"
+            android:textColor="@color/blue_grey_900" />
+
+    </RelativeLayout>
+</FrameLayout>

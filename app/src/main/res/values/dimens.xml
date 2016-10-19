@@ -6,4 +6,5 @@
     <dimen name="infoMargin">28dp</dimen>
     <dimen name="cutoutStrokeDiameter">2dp</dimen>
     <dimen name="dotSize">30dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

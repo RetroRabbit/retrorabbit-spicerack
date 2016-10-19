@@ -297,6 +297,9 @@ public class HelpOverlay extends RelativeLayout {
                 if (circleShapeStroke != null)
                     circleShapeStroke.reCalculateAll();
 
+                if (height == 0)
+                    return;
+
                 if (circleShape != null && circleShape.getPoint().y != 0 && !isLayoutCompleted) {
 
                     setDotViewLayout(configuration.isDotViewEnabled());
@@ -648,9 +651,8 @@ public class HelpOverlay extends RelativeLayout {
     public static class Builder {
 
         private HelpOverlay materialIntroView;
-
         private Activity activity;
-        private int targetId;
+        private RecyclerView.OnChildAttachStateChangeListener onChildAttachStateChangeListener;
 
         private Builder(Activity activity) {
             this.activity = activity;
@@ -667,8 +669,6 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private HelpOverlay build() {
-            if (materialIntroView.getConfiguration() == null)
-                materialIntroView.setConfiguration(new HelpOverlayConfiguration());
 
             materialIntroView.populate();
 
@@ -691,24 +691,46 @@ public class HelpOverlay extends RelativeLayout {
             return this;
         }
 
-        public HelpOverlay show(View view) {
-            materialIntroView.setTarget(new ViewTarget(view));
-            build().show(activity);
-            return materialIntroView;
+        public void show(final View view) {
+            if (materialIntroView.getConfiguration() == null)
+                materialIntroView.setConfiguration(new HelpOverlayConfiguration());
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    materialIntroView.setTarget(new ViewTarget(view));
+                    build().show(activity);
+                }
+            }, materialIntroView.getConfiguration().getDelayBeforeShow());
+
         }
 
-        public Builder show(@IdRes final int resId, final RecyclerView recyclerView, final int position) {
-            recyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        public void show(@IdRes final int resId, @IdRes final int layoutId, final RecyclerView recyclerView, final int position) {
+
+            onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
                 @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-                    super.onItemRangeInserted(positionStart, itemCount);
-                    if (positionStart == position && recyclerView.findViewHolderForAdapterPosition(positionStart).itemView.findViewById(resId) != null) {
-                        materialIntroView.setTarget(new ViewTarget(recyclerView.findViewHolderForAdapterPosition(positionStart).itemView.findViewById(resId)));
-                        build().show(activity);
+                public void onChildViewAttachedToWindow(View view) {
+                    if (recyclerView.getChildViewHolder(view).getAdapterPosition() == position
+                            && recyclerView.getChildViewHolder(view).itemView.getId() == layoutId) {
+
+
+                        HelpOverlay.Builder.start(activity)
+                                .setConfiguration(materialIntroView.configuration)
+                                .setUsageId("CBD_0_Location") //THIS SHOULD BE UNIQUE ID
+                                .show(view.findViewById(resId));
+                        recyclerView.removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+
                     }
                 }
-            });
-            return this;
+
+                @Override
+                public void onChildViewDetachedFromWindow(View view) {
+
+                }
+            };
+
+            recyclerView.addOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+
         }
     }
 }

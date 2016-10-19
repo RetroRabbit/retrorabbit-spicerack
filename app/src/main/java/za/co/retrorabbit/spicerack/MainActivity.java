@@ -5,12 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import co.za.retrorabbit.emmenthal.HelpOverlay;
-import co.za.retrorabbit.emmenthal.shape.Focus;
-import co.za.retrorabbit.emmenthal.shape.FocusGravity;
-import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
-import co.za.retrorabbit.emmenthal.utils.Utils;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -19,11 +13,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void previewEmmenthal(View v) {
-        Intent intent = new Intent(this, OverlayActivity.class);
+    public void previewEmmenthalStatic(View v) {
+        Intent intent = new Intent(this, StaticOverlayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         startActivity(intent);
     }
 
+    public void previewEmmenthalList(View v) {
+        Intent intent = new Intent(this, ListOverlayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
+    }
 }

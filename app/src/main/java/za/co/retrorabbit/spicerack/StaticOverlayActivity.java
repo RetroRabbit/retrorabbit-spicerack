@@ -10,12 +10,12 @@ import co.za.retrorabbit.emmenthal.shape.FocusGravity;
 import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
 import co.za.retrorabbit.emmenthal.utils.Utils;
 
-public class OverlayActivity extends AppCompatActivity {
+public class StaticOverlayActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overlay);
+        setContentView(R.layout.activity_static_overlay);
     }
 
     public void showOverlay(View v) {

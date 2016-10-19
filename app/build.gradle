@@ -20,9 +20,14 @@ android {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
+
+    compile project(path: ':salt')
+    compile project(path: ':habanero')
     compile project(path: ':emmenthal')
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
     compile 'com.android.support:appcompat-v7:' + project.repositoryVersion
     compile 'com.android.support:design:' + project.repositoryVersion
-    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-v4:24.2.1'
 }

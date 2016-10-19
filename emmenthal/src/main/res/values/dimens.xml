@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="buttom_margin_top">8dp</dimen>
+    <dimen name="titleTextSize">15dp</dimen>
+    <dimen name="titleMessageTextSize">15dp</dimen>
+    <dimen name="overlay_margin_end">20dp</dimen>
+    <dimen name="overlay_margin_start">20dp</dimen>
 </resources>

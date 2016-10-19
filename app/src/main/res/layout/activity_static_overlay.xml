@@ -10,17 +10,6 @@
     tools:context="za.co.retrorabbit.spicerack.MainActivity">
 
     <Button
-        android:id="@+id/button_overlay_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showOverlay"
-        android:text="Show Overlay"
-        android:layout_marginBottom="24dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="25dp" />
-
-    <Button
         android:id="@+id/button_overlay_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -93,4 +82,15 @@
         android:text="Show Overlay"
         android:layout_above="@+id/button_overlay_9"
         android:layout_toEndOf="@+id/button_overlay_9" />
+
+    <Button
+        android:id="@+id/button_overlay_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showOverlay"
+        android:text="Show Overlay"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="53dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
