@@ -29,5 +29,5 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:' + project.repositoryVersion
     compile 'com.android.support:design:' + project.repositoryVersion
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v4:25.0.0'
 }
