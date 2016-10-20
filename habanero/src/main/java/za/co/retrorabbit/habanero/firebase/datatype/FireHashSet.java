@@ -57,22 +57,20 @@ public class FireHashSet<T> implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-        int index = mObjects.indexOfToAdd(previousChildName);
-        mObjects.addOrUpdate(index, dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
+        int index = mObjects.addOrUpdate(previousChildName, dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
         notifyChangedListeners(OnChangedListener.EventType.Added, index);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-        mObjects.addOrUpdate(dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
-        int index = mObjects.indexOf(dataSnapshot.getKey());
+        int index = mObjects.addOrUpdate(dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
         notifyChangedListeners(OnChangedListener.EventType.Changed, index);
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         int index = mObjects.remove(dataSnapshot.getKey());
-        if (index != -1)
+        if (index <= -1)
             notifyChangedListeners(OnChangedListener.EventType.Removed, index);
     }
 
@@ -114,11 +112,15 @@ public class FireHashSet<T> implements ChildEventListener {
     }
 
     public String getKey(int position) {
-        return mObjects.getIndexMap().get(position);
+        return mObjects.getKey(position);
     }
 
     public int indexOf(String key) {
-        return mObjects.getIndexMap().indexOf(key);
+        return mObjects.indexOf(key);
+    }
+
+    public void setReversed(boolean reversed) {
+        mObjects.setReversed(reversed);
     }
 
     public void setFilteredMap(ArrayList<String> keys) {

@@ -49,6 +49,11 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         addListeners();
     }
 
+    public void setReversed(boolean reversed) {
+        getData().setReversed(reversed);
+        if (getItemCount() > 0)
+            notifyItemRangeChanged(0, getItemCount());
+    }
 
     public void addListeners() {
         mData.setOnChangedListener(new FireHashSet.OnChangedListener() {

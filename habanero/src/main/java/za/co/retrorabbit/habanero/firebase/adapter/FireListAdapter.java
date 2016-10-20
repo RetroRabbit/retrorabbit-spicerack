@@ -51,6 +51,12 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         this(mModelClass, mModelLayout, mViewHolderClass, (Query) mReference);
     }
 
+    public void setReversed(boolean reversed) {
+        mData.setReversed(reversed);
+        if (getCount() > 0)
+            notifyDataSetChanged();
+    }
+
     public VH onCreateViewHolder(ViewGroup parent, int viewResource) {
         ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewResource, parent, false);
         try {
