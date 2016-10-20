@@ -1,6 +1,7 @@
 package za.co.retrorabbit.habanero.firebase.adapter;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -10,6 +11,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
 
@@ -31,6 +34,7 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     RecyclerView recyclerView;
     Handler filterHandler;
     Runnable filterRunnable;
+    Comparator<? super T> sorter;
     private boolean showFooter = false, showHeader = false, showSubHeader = false;
 
     public FireRecyclerAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, DatabaseReference mReference) {
@@ -55,6 +59,10 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
             notifyItemRangeChanged(0, getItemCount());
     }
 
+    public void setValueParser(FireHashSet.ValueParser<T> valueParser) {
+        mData.setValueParser(valueParser);
+    }
+
     public void addListeners() {
         mData.setOnChangedListener(new FireHashSet.OnChangedListener() {
             @Override
@@ -64,33 +72,29 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyItemInserted(index);
-                        /*if (scrollTo) {
-                            int scrollToIndex = FireRecyclerAdapter.this.mData.indexOf(scrollToKey);
-                            if (scrollToIndex != -1) {
-                                recyclerView.getLayoutManager().scrollToPosition(scrollToIndex);
-                                //TODO: Firebase
-                                *//*if (deleteScrollTo) {
-                                    adapter.setDeeplinkPosition(deeplinkItemPosition);
-                                    adapter.setDeleteId(scrollToId);
-                                }*//*
-                                scrollTo = false;
-                            }
-                        }*/
+                        if (sorter != null)
+                            sort();
                         break;
                     case Changed:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyItemChanged(index);
+                        if (sorter != null)
+                            sort();
                         break;
                     case Removed:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyItemRemoved(index);
+                        if (sorter != null)
+                            sort();
                         break;
                     case Moved:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyItemMoved(oldIndex, index);
+                        if (sorter != null)
+                            sort();
                         break;
                     default:
                         throw new IllegalStateException("Incomplete case statement");
@@ -417,5 +421,36 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public int getItemPosition(String key) {
         return getData().indexOf(key);
+    }
+
+    public void setSorter(Comparator<? super T> sorter) {
+        this.sorter = sorter;
+    }
+
+    /**
+     * Sorts the content of this adapter using the set sorter.
+     */
+    public void sort() {
+        if (sorter != null)
+            sort(sorter);
+    }
+
+    /**
+     * Sorts the content of this adapter using the specified sorter.
+     *
+     * @param comparator The sorter used to sort the objects contained
+     *                   in this adapter.
+     */
+    public void sort(@NonNull Comparator<? super T> comparator) {
+        ArrayList<T> sortedList = new ArrayList<T>();
+        if (mData.isFiltered()) {
+            sortedList = new ArrayList<T>(mData.getFilteredValues().values());
+        } else {
+            sortedList = new ArrayList<T>(mData.getValues().values());
+        }
+        Collections.sort(sortedList, comparator);
+
+        mData.createIndexMapFromList(sortedList, mData.isFiltered() ? mData.getFilteredValues() : mData.getValues());
+        notifyDataSetChanged();
     }
 }

@@ -1,5 +1,6 @@
 package za.co.retrorabbit.habanero.firebase.datatype;
 
+import android.text.TextUtils;
 import android.util.Pair;
 
 import com.google.firebase.database.ChildEventListener;
@@ -10,6 +11,7 @@ import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import za.co.retrorabbit.salt.FilterableIndexedHashMap;
 
@@ -18,9 +20,10 @@ import za.co.retrorabbit.salt.FilterableIndexedHashMap;
  */
 public class FireHashSet<T> implements ChildEventListener {
 
+    ValueParser<T> valueParser;
     private Class<T> mModelClass;
     private Query mQuery;
-    private OnChangedListener mListener;
+    private OnChangedListener<T> mListener;
     private FilterableIndexedHashMap<String, T> mObjects;
 
     public FireHashSet(Query mQuery, Class<T> mModelClass) {
@@ -55,15 +58,21 @@ public class FireHashSet<T> implements ChildEventListener {
         return mObjects.getUnfiltered(index);
     }
 
+    protected T parseDataSnapshot(DataSnapshot dataSnapshot) {
+        if (valueParser != null)
+            return valueParser.parseDataSnapshot(dataSnapshot);
+        return dataSnapshot.getValue(mModelClass);
+    }
+
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-        int index = mObjects.addOrUpdate(previousChildName, dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
+        int index = mObjects.addOrUpdate(previousChildName, dataSnapshot.getKey(), parseDataSnapshot(dataSnapshot));
         notifyChangedListeners(OnChangedListener.EventType.Added, index);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-        int index = mObjects.addOrUpdate(dataSnapshot.getKey(), dataSnapshot.getValue(mModelClass));
+        int index = mObjects.addOrUpdate(dataSnapshot.getKey(), parseDataSnapshot(dataSnapshot));
         notifyChangedListeners(OnChangedListener.EventType.Changed, index);
     }
 
@@ -85,7 +94,7 @@ public class FireHashSet<T> implements ChildEventListener {
 
     }
 
-    public void setOnChangedListener(OnChangedListener listener) {
+    public void setOnChangedListener(OnChangedListener<T> listener) {
         mListener = listener;
     }
 
@@ -139,10 +148,40 @@ public class FireHashSet<T> implements ChildEventListener {
         return mObjects.getValueMap();
     }
 
-    public interface OnChangedListener {
+    public HashMap<String, T> getFilteredValues() {
+        return mObjects.getFilteredMap();
+    }
+
+    public void createIndexMapFromList(ArrayList<T> sortedList, HashMap<String, T> dataMap) {
+        ArrayList<String> indexMap = new ArrayList<>();
+        for (T t : sortedList) {
+            String key = getKeyByValue(dataMap, t);
+            if (!TextUtils.isEmpty(key))
+                indexMap.add(key);
+        }
+        setFilteredMap(indexMap);
+    }
+
+    private String getKeyByValue(Map<String, T> map, T value) {
+        for (Map.Entry<String, T> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public void setValueParser(ValueParser<T> valueParser) {
+        this.valueParser = valueParser;
+    }
+
+    public interface OnChangedListener<T> {
         void onChanged(EventType type, int index, int oldIndex);
 
         enum EventType {Added, Changed, Removed, Moved}
     }
 
+    public interface ValueParser<T> {
+        T parseDataSnapshot(DataSnapshot dataSnapshot);
+    }
 }

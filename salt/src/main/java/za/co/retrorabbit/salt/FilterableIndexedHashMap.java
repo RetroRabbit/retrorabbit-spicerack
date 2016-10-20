@@ -192,6 +192,15 @@ public class FilterableIndexedHashMap<K, T> {
         return mValueMap;
     }
 
+    public HashMap<K, T> getFilteredMap() {
+        HashMap<K, T> filteredMap = new HashMap<>();
+        for (K k : new ArrayList<>(mIndexMap)) {
+            if (mValueMap.containsKey(k))
+                filteredMap.put(k, mValueMap.get(k));
+        }
+        return filteredMap;
+    }
+
     public K getKey(int index) {
         if (mReversed)
             index = mIndexMap.size() - index + 1;
