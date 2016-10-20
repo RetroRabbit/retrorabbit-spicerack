@@ -34,7 +34,9 @@ public class HelpOverlayConfiguration {
     @StyleRes
     private int messageStyle;
     /**
-     * Delay before Overlay is shown
+     * HelpOverlay will start
+     * showing after delayMillis seconds
+     * passed
      */
     private int delayBeforeShow;
     /**
@@ -47,12 +49,6 @@ public class HelpOverlayConfiguration {
      */
     @ColorRes
     private Integer maskColorResource;
-    /**
-     * HelpOverlay will start
-     * showing after delayMillis seconds
-     * passed
-     */
-    private int delayMillis;
     /**
      * Show/Dismiss HelpOverlay
      * with fade in/out animation if
@@ -405,15 +401,6 @@ public class HelpOverlayConfiguration {
 
     public HelpOverlayConfiguration setMessageResourceColor(int messageColor) {
         this.messageResourceColor = messageColor;
-        return this;
-    }
-
-    public int getDelayMillis() {
-        return delayMillis;
-    }
-
-    public HelpOverlayConfiguration setDelayMillis(int delayMillis) {
-        this.delayMillis = delayMillis;
         return this;
     }
 

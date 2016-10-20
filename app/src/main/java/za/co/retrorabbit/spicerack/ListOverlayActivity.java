@@ -34,7 +34,6 @@ public class ListOverlayActivity extends Activity {
                 .setTitleText("Hi There!")
                 .setFocusGravity(FocusGravity.CENTER)
                 .setFocusType(Focus.MINIMUM)
-                .setDelayMillis(1000)
                 .setDelayBeforeShow(2000)
                 .setFadeAnimationEnabled(true)
                 .setClickTargetOnTouch(false)

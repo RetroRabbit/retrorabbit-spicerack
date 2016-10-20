@@ -445,7 +445,7 @@ public class HelpOverlay extends RelativeLayout {
                 else
                     setVisibility(VISIBLE);
             }
-        }, configuration.getDelayMillis());
+        }, configuration.getDelayBeforeShow());
 
     }
 
