@@ -236,6 +236,20 @@ public class HelpOverlay extends RelativeLayout {
             setButtonColorLeft(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonColorResourceLeft(), getContext().getTheme()));
         }
 
+        //Configure Left Button Text
+        if (configuration.getButtonTextLeft() != null) {
+            setButtonTextLeft(configuration.getButtonTextLeft());
+        } else if (configuration.getButtonTextResourceLeft() != null) {
+            setButtonTextLeft(configuration.getButtonTextResourceLeft());
+        }
+
+        //Configure Right Button Text
+        if (configuration.getButtonTextRight() != null) {
+            setButtonTextRight(configuration.getButtonTextRight());
+        } else if (configuration.getButtonTextResourceRight() != null) {
+            setButtonTextRight(configuration.getButtonTextResourceRight());
+        }
+
         //Configure Right Button Color
         if (configuration.getButtonColorRight() != null) {
             setButtonColorRight(configuration.getButtonColorRight());
@@ -732,6 +746,22 @@ public class HelpOverlay extends RelativeLayout {
 
     public void setInfoMargin(Integer infoMargin) {
         this.infoMargin = infoMargin;
+    }
+
+    public void setButtonTextLeft(String buttonTextLeft) {
+        buttonLeft.setText(buttonTextLeft);
+    }
+
+    public void setButtonTextLeft(int buttonTextLeftRes) {
+        buttonLeft.setText(buttonTextLeftRes);
+    }
+
+    public void setButtonTextRight(String buttonTextRight) {
+        buttonRight.setText(buttonTextRight);
+    }
+
+    public void setButtonTextRight(int buttonTextRightRes) {
+        buttonRight.setText(buttonTextRightRes);
     }
 
 

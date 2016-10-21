@@ -58,7 +58,11 @@ public class ListOverlayActivity extends Activity {
                 .setButtonTextColorResourceLeft(android.R.color.white)
                 .setButtonTextColorResourceRight(android.R.color.white)
                 .setButtonColorResourceLeft(R.color.blue_grey_700)
-                .setButtonColorResourceRight(R.color.blue_grey_700);
+                .setButtonColorResourceRight(R.color.blue_grey_700)
+                .setButtonTextResourceLeft(android.R.string.yes)
+                .setButtonTextResourceRight(android.R.string.no)
+
+        ;
 
         HelpOverlay.Builder.start(ListOverlayActivity.this)
                 .setConfiguration(configuration)

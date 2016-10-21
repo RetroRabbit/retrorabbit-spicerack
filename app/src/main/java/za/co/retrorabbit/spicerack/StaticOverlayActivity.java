@@ -32,7 +32,7 @@ public class StaticOverlayActivity extends AppCompatActivity {
                 .setClickTargetOnTouch(false)
                 .setDismissOnTouch(true)
                 .setDotViewEnabled(true)
-                .setDelayBeforeShow(0)
+                .setDelayBeforeShow(2000)
                 .setDotSizeResource(R.dimen.dotSize)
                 .setDotColorResource(R.color.colorAccent)
                 .setCutoutColorResource(android.R.color.transparent)
@@ -48,7 +48,9 @@ public class StaticOverlayActivity extends AppCompatActivity {
                 .setButtonTextColorResourceLeft(android.R.color.white)
                 .setButtonTextColorResourceRight(android.R.color.white)
                 .setButtonColorResourceLeft(R.color.blue_grey_700)
-                .setButtonColorResourceRight(R.color.blue_grey_700);
+                .setButtonColorResourceRight(R.color.blue_grey_700)
+                .setButtonTextResourceLeft(android.R.string.yes)
+                .setButtonTextResourceRight(android.R.string.no);
 
         HelpOverlay.Builder.start(this)
                 .setConfiguration(configuration)

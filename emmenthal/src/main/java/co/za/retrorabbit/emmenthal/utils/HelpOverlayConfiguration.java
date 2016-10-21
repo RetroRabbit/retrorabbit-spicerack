@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.Dimension;
 import android.support.annotation.FloatRange;
+import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.util.Log;
 
@@ -145,13 +146,18 @@ public class HelpOverlayConfiguration {
     @ColorRes
     private Integer titleResourceColor, messageResourceColor;
 
-    private Integer cutoutRadius, cutoutStroke;
+    private Integer cutoutRadius;
+    private Integer cutoutStroke;
     private Integer infoMargin;
     private Integer cutoutRadiusResource;
     private Integer cutoutStrokeSizeResource;
     private Integer dotColorResource;
     private Integer cutoutColorResource;
     private Integer infoMarginResource;
+    private Integer buttonTextResourceLeft;
+    private Integer buttonTextResourceRight;
+    private String buttonTextLeft;
+    private String buttonTextRight;
 
     public HelpOverlayConfiguration() {
         setMaskColor(Constants.DEFAULT_MASK_COLOR);
@@ -570,7 +576,6 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-
     public Integer getInfoMargin() {
         return infoMargin;
     }
@@ -595,8 +600,8 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    @Dimension(unit = Dimension.DP)
     @DimenRes
+    @Dimension(unit = Dimension.DP)
     public Integer getCutoutRadiusResource() {
         return cutoutRadiusResource;
     }
@@ -609,5 +614,44 @@ public class HelpOverlayConfiguration {
     @DimenRes
     public Integer getInfoMarginResource() {
         return infoMarginResource;
+    }
+
+
+    public HelpOverlayConfiguration setButtonTextResourceLeft(@StringRes Integer res) {
+        buttonTextResourceLeft = res;
+        return this;
+    }
+
+    @StringRes
+    public Integer getButtonTextResourceLeft() {
+        return buttonTextResourceLeft;
+    }
+
+    public HelpOverlayConfiguration setButtonTextResourceRight(@StringRes Integer res) {
+        buttonTextResourceRight = res;
+        return this;
+    }
+
+    @StringRes
+    public Integer getButtonTextResourceRight() {
+        return buttonTextResourceRight;
+    }
+
+    public HelpOverlayConfiguration setButtonTextLeft(String res) {
+        buttonTextLeft = res;
+        return this;
+    }
+
+    public String getButtonTextLeft() {
+        return buttonTextLeft;
+    }
+
+    public HelpOverlayConfiguration setButtonTextRight(String res) {
+        buttonTextRight = res;
+        return this;
+    }
+
+    public String getButtonTextRight() {
+        return buttonTextRight;
     }
 }
