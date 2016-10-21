@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.StyleRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,11 +34,11 @@ import android.widget.TextView;
 import co.za.retrorabbit.emmenthal.animation.AnimationFactory;
 import co.za.retrorabbit.emmenthal.animation.AnimationListener;
 import co.za.retrorabbit.emmenthal.animation.HelpOverlayListener;
-import co.za.retrorabbit.emmenthal.prefs.PreferencesManager;
 import co.za.retrorabbit.emmenthal.shape.Circle;
 import co.za.retrorabbit.emmenthal.target.Target;
 import co.za.retrorabbit.emmenthal.target.ViewTarget;
 import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
+import co.za.retrorabbit.emmenthal.utils.PreferencesManager;
 
 /**
  * TODO: document your custom view class.
@@ -169,8 +170,27 @@ public class HelpOverlay extends RelativeLayout {
     /**
      * Set to the Overlay Color
      */
+    @ColorInt
     private int maskColor;
+    /**
+     * Set to the Stroke Color
+     */
+    @ColorInt
     private Integer strokeColor;
+    /**
+     * Set to the Cutout Radius
+     */
+    @ColorInt
+    private Integer cutoutRadius;
+    /**
+     * Set to the Dot Color
+     */
+    @ColorInt
+    private Integer dotColor;
+    private Integer cutoutStrokeSize;
+    private Integer cutoutColor;
+    private Integer dotSize;
+    private Integer infoMargin;
 
     public HelpOverlay(Context context) {
         super(context);
@@ -251,13 +271,54 @@ public class HelpOverlay extends RelativeLayout {
             setMessageTextColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getMessageResourceColor(), getContext().getTheme()));
         }
 
+        //Configure Cutout Color
+        if (configuration.getCutoutColor() != null) {
+            setCutoutColor(configuration.getCutoutColor());
+        } else if (configuration.getCutoutColorResource() != null) {
+            setCutoutColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getCutoutColorResource(), getContext().getTheme()));
+        }
+
         //Configure Stroke Color
         if (configuration.getStrokeColor() != null) {
             setStrokeColor(configuration.getStrokeColor());
-        } else if (configuration.getStrokeResourceColor() != null) {
-            setStrokeColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getStrokeResourceColor(), getContext().getTheme()));
+        } else if (configuration.getStrokeColorResource() != null) {
+            setStrokeColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getStrokeColorResource(), getContext().getTheme()));
         }
 
+        //Configure Cutout Radius
+        if (configuration.getCutoutRadius() != null) {
+            setCutoutRadius(configuration.getCutoutRadius());
+        } else if (configuration.getCutoutRadiusResource() != null) {
+            setCutoutRadius(getContext().getResources().getDimensionPixelSize(configuration.getCutoutRadiusResource()));
+        }
+
+        //Configure Cutout Stroke Size
+        if (configuration.getCutoutStrokeSize() != null) {
+            setCutoutStrokeSize(configuration.getCutoutStrokeSize());
+        } else if (configuration.getCutoutStrokeSizeResource() != null) {
+            setCutoutStrokeSize(getContext().getResources().getDimensionPixelSize(configuration.getCutoutStrokeSizeResource()));
+        }
+
+        //Configure Dot Color
+        if (configuration.getDotColor() != null) {
+            setDotColor(configuration.getDotColor());
+        } else if (configuration.getDotColorResource() != null) {
+            setDotColor(ContextCompat.getColor(getContext(), configuration.getDotColorResource()));
+        }
+
+        //Configure Dot Size
+        if (configuration.getDotSize() != null) {
+            setDotSize(configuration.getDotSize());
+        } else if (configuration.getDotSizeResource() != null) {
+            setDotSize(getContext().getResources().getDimensionPixelSize(configuration.getDotSizeResource()));
+        }
+
+        //Configure Info Margin
+        if (configuration.getInfoMargin() != null) {
+            setInfoMargin(configuration.getInfoMargin());
+        } else if (configuration.getInfoMarginResource() != null) {
+            setInfoMargin(getContext().getResources().getDimensionPixelSize(configuration.getInfoMarginResource()));
+        }
 
         isLayoutCompleted = false;
         isReady = false;
@@ -272,7 +333,7 @@ public class HelpOverlay extends RelativeLayout {
 
         //Setup Eraser
         eraser = new Paint();
-        eraser.setColor(configuration.getCutoutColor());
+        eraser.setColor(cutoutColor);
         eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         eraser.setFlags(Paint.ANTI_ALIAS_FLAG);
 
@@ -284,7 +345,7 @@ public class HelpOverlay extends RelativeLayout {
 
 
         Drawable dotImage = ResourcesCompat.getDrawable(getResources(), R.drawable.dotview, getContext().getTheme());
-        dotImage.setColorFilter(configuration.getDotColor(), PorterDuff.Mode.MULTIPLY);
+        dotImage.setColorFilter(dotColor, PorterDuff.Mode.MULTIPLY);
         ((ImageView) dotView).setImageDrawable(dotImage);
         dotView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
 
@@ -350,16 +411,16 @@ public class HelpOverlay extends RelativeLayout {
         /**
          * Clear focus area
          */
-        circleShape.draw(this.canvas, eraser, configuration.getCutoutPadding() + configuration.getCutoutStroke());
+        circleShape.draw(this.canvas, eraser, cutoutRadius + cutoutStrokeSize);
         /**
          * Draw Stroke Area
          */
-        circleShape.draw(this.canvas, stroke, configuration.getCutoutPadding() + configuration.getCutoutStroke());
+        circleShape.draw(this.canvas, stroke, cutoutRadius + cutoutStrokeSize);
 
         /**
          * Clear focus area
          */
-        circleShape.draw(this.canvas, eraser, configuration.getCutoutPadding());
+        circleShape.draw(this.canvas, eraser, cutoutRadius);
 
         canvas.drawBitmap(bitmap, 0, 0, null);
     }
@@ -425,14 +486,14 @@ public class HelpOverlay extends RelativeLayout {
 
     private void show(Activity activity) {
 
-        if (preferencesManager.isDisplayed(materialIntroViewId))
+        if (!preferencesManager.shouldDisplay(materialIntroViewId))
             return;
 
         ((ViewGroup) activity.getWindow().getDecorView()).addView(this);
 
         setReady(true);
 
-        handler.postDelayed(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 if (configuration.isFadeAnimationEnabled())
@@ -445,7 +506,7 @@ public class HelpOverlay extends RelativeLayout {
                 else
                     setVisibility(VISIBLE);
             }
-        }, configuration.getDelayBeforeShow());
+        });
 
     }
 
@@ -458,7 +519,6 @@ public class HelpOverlay extends RelativeLayout {
             public void onAnimationEnd() {
                 setVisibility(GONE);
                 removeMaterialView();
-                preferencesManager.reset(materialIntroViewId);
 
                 if (materialIntroListener != null)
                     materialIntroListener.onUserClicked(materialIntroViewId);
@@ -494,7 +554,7 @@ public class HelpOverlay extends RelativeLayout {
                     infoDialogParams.addRule(RelativeLayout.BELOW, R.id.dotView);
                     infoDialogParams.setMargins(
                             0,
-                            circleShapeStroke.getRadius() - (dotView.getLayoutParams().height / 2) + configuration.getInfoMargin(),
+                            circleShapeStroke.getRadius() - (dotView.getLayoutParams().height / 2) + infoMargin,
                             0,
                             0);
                 } else {
@@ -503,7 +563,7 @@ public class HelpOverlay extends RelativeLayout {
                             0,
                             0,
                             0,
-                            circleShapeStroke.getRadius() + (dotView.getLayoutParams().height / 2) + configuration.getInfoMargin());
+                            circleShapeStroke.getRadius() + (dotView.getLayoutParams().height / 2) + infoMargin);
                 }
 
 
@@ -530,8 +590,8 @@ public class HelpOverlay extends RelativeLayout {
                 RelativeLayout.LayoutParams dotViewLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 
-                dotViewLayoutParams.height = configuration.getDotSize();
-                dotViewLayoutParams.width = configuration.getDotSize();
+                dotViewLayoutParams.height = dotSize;
+                dotViewLayoutParams.width = dotSize;
                 dotViewLayoutParams.setMargins(
                         circleShape.getPoint().x - (dotViewLayoutParams.width / 2),
                         circleShape.getPoint().y - (dotViewLayoutParams.height / 2),
@@ -641,9 +701,39 @@ public class HelpOverlay extends RelativeLayout {
         textViewMessage.setTextColor(color);
     }
 
-    public void setStrokeColor(Integer strokeColor) {
-        this.strokeColor = strokeColor;
+    public void setStrokeColor(@ColorInt int strokeColor) {
+        this.strokeColor = Color.argb(
+                (int) (255 * configuration.getStrokeAlpha()),
+                Color.red(strokeColor),
+                Color.green(strokeColor),
+                Color.blue(strokeColor)
+        );
     }
+
+    public void setCutoutRadius(Integer cutoutRadius) {
+        this.cutoutRadius = cutoutRadius;
+    }
+
+    public void setDotColor(Integer dotColor) {
+        this.dotColor = dotColor;
+    }
+
+    public void setCutoutStrokeSize(Integer cutoutStrokeSize) {
+        this.cutoutStrokeSize = cutoutStrokeSize;
+    }
+
+    public void setCutoutColor(Integer cutoutColor) {
+        this.cutoutColor = cutoutColor;
+    }
+
+    public void setDotSize(Integer dotSize) {
+        this.dotSize = dotSize;
+    }
+
+    public void setInfoMargin(Integer infoMargin) {
+        this.infoMargin = infoMargin;
+    }
+
 
     /**
      * Builder Class
@@ -676,13 +766,13 @@ public class HelpOverlay extends RelativeLayout {
                     materialIntroView.targetView,
                     materialIntroView.configuration.getFocusType(),
                     materialIntroView.configuration.getFocusGravity(),
-                    materialIntroView.configuration.getCutoutPadding()));
+                    materialIntroView.cutoutRadius));
 
             materialIntroView.setCircleStroke(new Circle(
                     materialIntroView.targetView,
                     materialIntroView.configuration.getFocusType(),
                     materialIntroView.configuration.getFocusGravity(),
-                    materialIntroView.configuration.getCutoutPadding() + materialIntroView.configuration.getCutoutStroke()));
+                    materialIntroView.cutoutRadius + materialIntroView.cutoutStrokeSize));
             return materialIntroView;
         }
 

@@ -11,6 +11,7 @@ import co.za.retrorabbit.emmenthal.HelpOverlay;
 import co.za.retrorabbit.emmenthal.shape.Focus;
 import co.za.retrorabbit.emmenthal.shape.FocusGravity;
 import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
+import co.za.retrorabbit.emmenthal.utils.PreferencesManager;
 import za.co.retrorabbit.spicerack.adapter.Item;
 import za.co.retrorabbit.spicerack.adapter.ListOverlayAdapter;
 
@@ -29,6 +30,8 @@ public class ListOverlayActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ListOverlayAdapter(getItems(), R.layout.list_overlay_item));
 
+        PreferencesManager.resetAll(this);
+
         configuration = new HelpOverlayConfiguration().setDotViewEnabled(true)
                 .setMessageText("Click this card and see what happens.")
                 .setTitleText("Hi There!")
@@ -39,6 +42,14 @@ public class ListOverlayActivity extends Activity {
                 .setClickTargetOnTouch(false)
                 .setDismissOnTouch(true)
                 .setDotViewEnabled(true)
+                .setDelayBeforeShow(2000)
+                .setDotSizeResource(R.dimen.dotSize)
+                .setDotColorResource(R.color.colorAccent)
+                .setCutoutColorResource(android.R.color.transparent)
+                .setCutoutStrokeColorResource(R.color.blue_grey_200, 0.8f)
+                .setCutoutRadiusResource(R.dimen.cutoutRadius)
+                .setInfoMarginResource(R.dimen.infoMargin)
+                .setCutoutStrokeSizeResource(R.dimen.cutoutStrokeSize)
                 .setTitleStyle(R.style.AppTheme_TextView_Medium_Medium)
                 .setMessageStyle(R.style.AppTheme_TextView_Light_Medium)
                 .setOverlayColorResource(R.color.overlayBackground)

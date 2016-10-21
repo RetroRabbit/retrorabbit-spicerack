@@ -2,7 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="cutoutPadding">5dp</dimen>
+    <dimen name="cutoutStrokeSize">5dp</dimen>
+    <dimen name="cutoutRadius">20dp</dimen>
     <dimen name="infoMargin">28dp</dimen>
     <dimen name="cutoutStrokeDiameter">2dp</dimen>
     <dimen name="dotSize">30dp</dimen>
