@@ -2,6 +2,7 @@ package za.co.retrorabbit.habanero.firebase.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.google.firebase.database.Query;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,6 +37,7 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     String filterConstraint;
     Map<String, Integer> indicatorMap = new LinkedHashMap<>();
     String[] sections = new String[]{};
+    Comparator<? super T> sorter;
 
     public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, FireHashSet mData) {
         this.mModelClass = mModelClass;
@@ -49,6 +53,16 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
 
     public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, DatabaseReference mReference) {
         this(mModelClass, mModelLayout, mViewHolderClass, (Query) mReference);
+    }
+
+    public void setReversed(boolean reversed) {
+        mData.setReversed(reversed);
+        if (getCount() > 0)
+            notifyDataSetChanged();
+    }
+
+    public void setValueParser(FireHashSet.ValueParser<T> valueParser) {
+        mData.setValueParser(valueParser);
     }
 
     public VH onCreateViewHolder(ViewGroup parent, int viewResource) {
@@ -161,21 +175,29 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyDataSetChanged();
+                        if (sorter != null)
+                            sort();
                         break;
                     case Changed:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyDataSetChanged();
+                        if (sorter != null)
+                            sort();
                         break;
                     case Removed:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyDataSetChanged();
+                        if (sorter != null)
+                            sort();
                         break;
                     case Moved:
                         if (filterConstraint != null)
                             filterSnapshots();
                         notifyDataSetChanged();
+                        if (sorter != null)
+                            sort();
                         break;
                     default:
                         throw new IllegalStateException("Incomplete case statement");
@@ -219,6 +241,37 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     @Override
     public Object[] getSections() {
         return sections;
+    }
+
+    public void setSorter(Comparator<? super T> sorter) {
+        this.sorter = sorter;
+    }
+
+    /**
+     * Sorts the content of this adapter using the set sorter.
+     */
+    public void sort() {
+        if (sorter != null)
+            sort(sorter);
+    }
+
+    /**
+     * Sorts the content of this adapter using the specified sorter.
+     *
+     * @param comparator The sorter used to sort the objects contained
+     *                   in this adapter.
+     */
+    public void sort(@NonNull Comparator<? super T> comparator) {
+        ArrayList<T> sortedList = new ArrayList<T>();
+        if (mData.isFiltered()) {
+            sortedList = new ArrayList<T>(mData.getFilteredValues().values());
+        } else {
+            sortedList = new ArrayList<T>(mData.getValues().values());
+        }
+        Collections.sort(sortedList, comparator);
+
+        mData.createIndexMapFromList(sortedList, mData.isFiltered() ? mData.getFilteredValues() : mData.getValues());
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
