@@ -1,12 +1,15 @@
 package za.co.retrorabbit.habanero.firebase.listener;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,12 +28,21 @@ public abstract class QueriedValueEventListener<T extends Object> implements Val
 
     @Override
     public final void onDataChange(DataSnapshot dataSnapshot) {
-        GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {
-        };
-        Map<String, Object> result = dataSnapshot.getValue(genericTypeIndicator);
-        if (result != null) {
+        List<Object> result = null;
+        try {
+            GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>() {
+            };
+            Map<String, Object> map = dataSnapshot.getValue(genericTypeIndicator);
+            if (map != null)
+                result = new ArrayList<>(map.values());
+        } catch (DatabaseException ex) {
+            GenericTypeIndicator<ArrayList<Object>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<Object>>() {
+            };
+            result = new ArrayList<>(dataSnapshot.getValue(genericTypeIndicator));
+        }
+        if (result != null && result.size() > 0) {
             Gson gson = new Gson();
-            onValueRetrieved((T) gson.fromJson(gson.toJson(result.values().toArray()[0]), mType));
+            onValueRetrieved((T) gson.fromJson(gson.toJson(result.get(0)), mType));
         } else {
             onEmptyValue();
         }
