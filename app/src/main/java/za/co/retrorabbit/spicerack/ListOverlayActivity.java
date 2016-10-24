@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import co.za.retrorabbit.emmenthal.HelpOverlay;
-import co.za.retrorabbit.emmenthal.shape.Focus;
-import co.za.retrorabbit.emmenthal.shape.FocusGravity;
-import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
 import co.za.retrorabbit.emmenthal.utils.PreferencesManager;
 import za.co.retrorabbit.spicerack.adapter.Item;
 import za.co.retrorabbit.spicerack.adapter.ListOverlayAdapter;
@@ -33,6 +32,18 @@ public class ListOverlayActivity extends Activity {
 
 
         HelpOverlay.Builder.start(ListOverlayActivity.this)
+                .setLeftButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "LEFT", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setRightButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .setConfiguration(MainActivity.getDefaultConfiguration())
                 .setUsageId("CBD_0_Location") //THIS SHOULD BE UNIQUE ID
                 .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);

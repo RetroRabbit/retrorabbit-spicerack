@@ -32,8 +32,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import co.za.retrorabbit.emmenthal.animation.AnimationFactory;
 import co.za.retrorabbit.emmenthal.animation.AnimationListener;
 import co.za.retrorabbit.emmenthal.animation.HelpOverlayListener;
@@ -836,20 +834,20 @@ public class HelpOverlay extends RelativeLayout {
 
         }
 
-        public void show(@IdRes final int resId, @IdRes final int layoutId, final RecyclerView recyclerView, final int position) {
+        int resId, layoutId, position;
 
+        public void show(@IdRes int resId, @IdRes int layoutId, RecyclerView recyclerView, int position) {
+            this.resId = resId;
+            this.layoutId = layoutId;
+            this.position = position;
             onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
                 @Override
                 public void onChildViewAttachedToWindow(View view) {
-                    if (recyclerView.getChildViewHolder(view).getAdapterPosition() == position
-                            && recyclerView.getChildViewHolder(view).itemView.getId() == layoutId) {
+                    if (((RecyclerView) view.getParent()).getChildViewHolder(view).getAdapterPosition() == HelpOverlay.Builder.this.position
+                            && ((RecyclerView) view.getParent()).getChildViewHolder(view).itemView.getId() == HelpOverlay.Builder.this.layoutId) {
 
-
-                        HelpOverlay.Builder.start(activity)
-                                .setConfiguration(materialIntroView.configuration)
-                                .setUsageId("CBD_0_Location") //THIS SHOULD BE UNIQUE ID
-                                .show(view.findViewById(resId));
-                        recyclerView.removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+                        HelpOverlay.Builder.this.show(view.findViewById(HelpOverlay.Builder.this.resId));
+                        ((RecyclerView) view.getParent()).removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
 
                     }
                 }
