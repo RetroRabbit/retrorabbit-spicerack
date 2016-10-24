@@ -29,7 +29,7 @@ public class ListOverlayActivity extends Activity {
         recyclerView.setAdapter(new ListOverlayAdapter(getItems(), R.layout.list_overlay_item));
 
         PreferencesManager.resetAll(this);
-
+        Toast.makeText(this, "Wait for it", Toast.LENGTH_SHORT).show();
 
         HelpOverlay.Builder.start(ListOverlayActivity.this)
                 .setLeftButtonOnClickListener(new View.OnClickListener() {
@@ -44,8 +44,8 @@ public class ListOverlayActivity extends Activity {
                         Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setConfiguration(MainActivity.getDefaultConfiguration())
-                .setUsageId("CBD_0_Location") //THIS SHOULD BE UNIQUE ID
+                .setConfiguration(MainActivity.getDefaultConfiguration().setDelayBeforeShow(2000))
+                .setUsageId("list_item") //THIS SHOULD BE UNIQUE ID
                 .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);
     }
 

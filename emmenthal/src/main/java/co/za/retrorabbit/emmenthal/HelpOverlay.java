@@ -510,6 +510,8 @@ public class HelpOverlay extends RelativeLayout {
                     });
                 else
                     setVisibility(VISIBLE);
+
+                preferencesManager.setDisplayed(materialIntroViewId);
             }
         });
 

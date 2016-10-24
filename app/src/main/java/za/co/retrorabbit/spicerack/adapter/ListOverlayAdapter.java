@@ -1,15 +1,18 @@
 package za.co.retrorabbit.spicerack.adapter;
 
+import android.app.Activity;
 import android.support.annotation.LayoutRes;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import co.za.retrorabbit.emmenthal.HelpOverlay;
+import za.co.retrorabbit.spicerack.MainActivity;
 import za.co.retrorabbit.spicerack.R;
 
 /**
@@ -47,11 +50,33 @@ public class ListOverlayAdapter extends RecyclerView.Adapter<ListOverlayAdapter.
 
         TextView title, subTitle;
 
-        public ListViewHolder(View itemView) {
+        public ListViewHolder(final View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.textview_title);
             subTitle = (TextView) itemView.findViewById(R.id.textview_sub_title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HelpOverlay.Builder.start((Activity) v.getContext())
+                            .setLeftButtonOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(v.getContext(), "LEFT", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setRightButtonOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setConfiguration(MainActivity.getDefaultConfiguration())
+                            .setUsageId("list_item_" + ((RecyclerView) itemView.getParent()).getChildLayoutPosition(v)) //THIS SHOULD BE UNIQUE ID
+                            .show(v);
+                }
+            });
         }
     }
 }

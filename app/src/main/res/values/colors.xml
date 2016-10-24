@@ -6,4 +6,5 @@
 
     <color name="overlayBackground">#e65d4037</color>
     <color name="overlayStroke">#e6bcaaa4</color>
+    <color name="overlayDotColor">#49d01716</color>
 </resources>
