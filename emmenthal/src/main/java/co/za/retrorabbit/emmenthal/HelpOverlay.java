@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
 import android.support.annotation.IdRes;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +31,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import co.za.retrorabbit.emmenthal.animation.AnimationFactory;
 import co.za.retrorabbit.emmenthal.animation.AnimationListener;
@@ -49,24 +52,20 @@ public class HelpOverlay extends RelativeLayout {
      * Configuration to use for Overlay
      */
     private HelpOverlayConfiguration configuration;
-
     /**
      * We don't draw HelpOverlay
      * until isReady field set to true
      */
     private boolean isReady;
-
     /**
      * circleShape focus on target
      * and clear circle to focus
      */
     private Circle circleShape, circleShapeStroke;
-
     /**
      * Target View
      */
     private Target targetView;
-
     /**
      * Eraser
      */
@@ -75,13 +74,11 @@ public class HelpOverlay extends RelativeLayout {
      * Stroke
      */
     private Paint stroke;
-
     /**
      * Handler will be used to
      * delay HelpOverlay
      */
     private Handler handler;
-
     /**
      * All views will be drawn to
      * this bitmap and canvas then
@@ -89,84 +86,61 @@ public class HelpOverlay extends RelativeLayout {
      */
     private Bitmap bitmap;
     private Canvas canvas;
-
     /**
      * Layout width/height
      */
     private int width;
     private int height;
-
     /**
      * Help Dialog view
      */
     private RelativeLayout infoLayout;
-
     /**
      * Help Overlay Title Text
      */
     private TextView textViewTitle;
-
     /**
      * Help Overlay Message Text
      */
     private TextView textViewMessage;
-
     /**
      * Help Overlay Left Button
      */
     private Button buttonLeft;
-
     /**
      * Help Overlay Right Button
      */
     private Button buttonRight;
-
     /**
      * Help Dialog will be shown
      * If this value true
      */
     private boolean isInfoEnabled = true;
-
     /**
      * Dot view will appear center of
      * cleared target area
      */
     private View dotView;
-
     /**
      * Save/Retrieve status of HelpOverlay
      * If Intro is already learnt then don't show
      * it again.
      */
     private PreferencesManager preferencesManager;
-
     /**
      * Check using this Id whether user learned
      * or not.
      */
     private String materialIntroViewId;
-
     /**
      * When layout completed, we set this true
      * Otherwise onGlobalLayoutListener stuck on loop.
      */
     private boolean isLayoutCompleted;
-
     /**
      * Notify user when HelpOverlay is dismissed
      */
     private HelpOverlayListener materialIntroListener;
-
-    /**
-     * Show Overlay Info Section
-     * if this is enabled
-     */
-    private boolean infoDialogEnabled = false;
-    /**
-     * Show Dot
-     * if this is enabled
-     */
-    private boolean dotViewEnabled = false;
     /**
      * Set to the Overlay Color
      */
@@ -187,10 +161,28 @@ public class HelpOverlay extends RelativeLayout {
      */
     @ColorInt
     private Integer dotColor;
+    /**
+     * Set to the Cutout Stroke Size
+     */
+    @Dimension(unit = Dimension.PX)
     private Integer cutoutStrokeSize;
+    /**
+     * Set to the Cutout Color
+     */
     private Integer cutoutColor;
+    /**
+     * Set to the Dot Size
+     */
+    @Dimension(unit = Dimension.PX)
     private Integer dotSize;
+    /**
+     * Set to the Info Section Marging from Cutout
+     */
     private Integer infoMargin;
+    /**
+     * Set to the left and right button click listeners
+     */
+    private OnClickListener leftButtonOnClickListener, rightButtonOnClickListener;
 
     public HelpOverlay(Context context) {
         super(context);
@@ -216,6 +208,8 @@ public class HelpOverlay extends RelativeLayout {
         buttonRight = (Button) view.findViewById(R.id.button_right);
         dotView = LayoutInflater.from(getContext()).inflate(R.layout.dotview, null);
 
+        buttonLeft.setOnClickListener(leftButtonOnClickListener);
+        buttonRight.setOnClickListener(rightButtonOnClickListener);
 
         setTitleStyle(configuration.getTitleStyle());
         setMessageStyle(configuration.getMessageStyle());
@@ -497,7 +491,6 @@ public class HelpOverlay extends RelativeLayout {
      *
      * @param activity
      */
-
     private void show(Activity activity) {
 
         if (!preferencesManager.shouldDisplay(materialIntroViewId))
@@ -626,7 +619,6 @@ public class HelpOverlay extends RelativeLayout {
     /**
      * SETTERS
      */
-
     private void setReady(boolean isReady) {
         this.isReady = isReady;
     }
@@ -764,6 +756,13 @@ public class HelpOverlay extends RelativeLayout {
         buttonRight.setText(buttonTextRightRes);
     }
 
+    public void setLeftButtonOnClickListener(OnClickListener onClickListener) {
+        leftButtonOnClickListener = onClickListener;
+    }
+
+    public void setRightButtonOnClickListener(OnClickListener onClickListener) {
+        rightButtonOnClickListener = onClickListener;
+    }
 
     /**
      * Builder Class
@@ -811,9 +810,21 @@ public class HelpOverlay extends RelativeLayout {
             return this;
         }
 
+        public Builder setLeftButtonOnClickListener(OnClickListener onClickListener) {
+            materialIntroView.setLeftButtonOnClickListener(onClickListener);
+
+            return this;
+        }
+
+        public Builder setRightButtonOnClickListener(OnClickListener onClickListener) {
+            materialIntroView.setRightButtonOnClickListener(onClickListener);
+            return this;
+        }
+
         public void show(final View view) {
             if (materialIntroView.getConfiguration() == null)
                 materialIntroView.setConfiguration(new HelpOverlayConfiguration());
+
 
             new Handler().postDelayed(new Runnable() {
                 @Override

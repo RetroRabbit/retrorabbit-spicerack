@@ -20,7 +20,6 @@ public class ListOverlayActivity extends Activity {
     private static final int ITEM_COUNT = 50;
 
     RecyclerView recyclerView;
-    HelpOverlayConfiguration configuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,40 +31,9 @@ public class ListOverlayActivity extends Activity {
 
         PreferencesManager.resetAll(this);
 
-        configuration = new HelpOverlayConfiguration().setDotViewEnabled(true)
-                .setMessageText("Click this card and see what happens.")
-                .setTitleText("Hi There!")
-                .setFocusGravity(FocusGravity.CENTER)
-                .setFocusType(Focus.MINIMUM)
-                .setDelayBeforeShow(2000)
-                .setFadeAnimationEnabled(true)
-                .setClickTargetOnTouch(false)
-                .setDismissOnTouch(true)
-                .setDotViewEnabled(true)
-                .setDelayBeforeShow(2000)
-                .setDotSizeResource(R.dimen.dotSize)
-                .setDotColorResource(R.color.colorAccent)
-                .setCutoutColorResource(android.R.color.transparent)
-                .setCutoutStrokeColorResource(R.color.blue_grey_200, 0.8f)
-                .setCutoutRadiusResource(R.dimen.cutoutRadius)
-                .setInfoMarginResource(R.dimen.infoMargin)
-                .setCutoutStrokeSizeResource(R.dimen.cutoutStrokeSize)
-                .setTitleStyle(R.style.AppTheme_TextView_Medium_Medium)
-                .setMessageStyle(R.style.AppTheme_TextView_Light_Medium)
-                .setOverlayColorResource(R.color.overlayBackground)
-                .setTitleResourceColor(R.color.overlayTitleColor)
-                .setMessageResourceColor(R.color.overlayMessageColor)
-                .setButtonTextColorResourceLeft(android.R.color.white)
-                .setButtonTextColorResourceRight(android.R.color.white)
-                .setButtonColorResourceLeft(R.color.blue_grey_700)
-                .setButtonColorResourceRight(R.color.blue_grey_700)
-                .setButtonTextResourceLeft(android.R.string.yes)
-                .setButtonTextResourceRight(android.R.string.no)
-
-        ;
 
         HelpOverlay.Builder.start(ListOverlayActivity.this)
-                .setConfiguration(configuration)
+                .setConfiguration(MainActivity.getDefaultConfiguration())
                 .setUsageId("CBD_0_Location") //THIS SHOULD BE UNIQUE ID
                 .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);
     }
@@ -73,7 +41,7 @@ public class ListOverlayActivity extends Activity {
     public ArrayList<Item> getItems() {
         ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < ITEM_COUNT; i++) {
-            items.add(new Item("Tile" + i, "SubTitle" + 1));
+            items.add(new Item("Tile " + i, "Sub Title " + 1));
         }
         return items;
     }
