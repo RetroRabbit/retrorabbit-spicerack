@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_frame"
     android:layout_width="match_parent"
-    android:background="@color/red_50"
+    android:background="@color/yellow_100"
+    tools:showIn="@layout/activity_list_overlay"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -24,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/amber_a700" />
+            android:background="@color/brown_700" />
 
         <TextView
             android:id="@+id/textview_title"

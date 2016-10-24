@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/blue_grey_900</color>
-    <color name="colorPrimaryDark">@color/grey_900</color>
-    <color name="colorAccent">@color/amber_a700</color>
+    <color name="colorPrimary">@color/brown_300</color>
+    <color name="colorPrimaryDark">@color/brown_400</color>
+    <color name="colorAccent">@color/red_700</color>
 
-    <color name="overlayBackground">#e6455a64</color>
-    <color name="overlayStroke">#e6b0bec5</color>
+    <color name="overlayBackground">#e65d4037</color>
+    <color name="overlayStroke">#e6bcaaa4</color>
 </resources>
