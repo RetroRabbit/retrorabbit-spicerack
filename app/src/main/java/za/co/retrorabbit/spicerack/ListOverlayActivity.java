@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import co.za.retrorabbit.emmenthal.HelpOverlay;
-import co.za.retrorabbit.emmenthal.utils.PreferencesManager;
+import co.za.retrorabbit.emmenthal.utils.HelpOverlayPreferencesManager;
 import za.co.retrorabbit.spicerack.adapter.Item;
 import za.co.retrorabbit.spicerack.adapter.ListOverlayAdapter;
 
@@ -28,7 +28,7 @@ public class ListOverlayActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ListOverlayAdapter(getItems(), R.layout.list_overlay_item));
 
-        PreferencesManager.resetAll(this);
+        HelpOverlayPreferencesManager.resetAll(this);
         Toast.makeText(this, "Wait for it", Toast.LENGTH_SHORT).show();
 
         HelpOverlay.Builder.start(ListOverlayActivity.this)

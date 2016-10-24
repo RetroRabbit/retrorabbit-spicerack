@@ -39,7 +39,7 @@ import co.za.retrorabbit.emmenthal.shape.Circle;
 import co.za.retrorabbit.emmenthal.target.Target;
 import co.za.retrorabbit.emmenthal.target.ViewTarget;
 import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
-import co.za.retrorabbit.emmenthal.utils.PreferencesManager;
+import co.za.retrorabbit.emmenthal.utils.HelpOverlayPreferencesManager;
 
 /**
  * TODO: document your custom view class.
@@ -124,7 +124,7 @@ public class HelpOverlay extends RelativeLayout {
      * If Intro is already learnt then don't show
      * it again.
      */
-    private PreferencesManager preferencesManager;
+    private HelpOverlayPreferencesManager preferencesManager;
     /**
      * Check using this Id whether user learned
      * or not.
@@ -205,6 +205,20 @@ public class HelpOverlay extends RelativeLayout {
         buttonLeft = (Button) view.findViewById(R.id.button_left);
         buttonRight = (Button) view.findViewById(R.id.button_right);
         dotView = LayoutInflater.from(getContext()).inflate(R.layout.dotview, null);
+        if (leftButtonOnClickListener == null)
+            setLeftButtonOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+        if (rightButtonOnClickListener == null)
+            setRightButtonOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
 
         buttonLeft.setOnClickListener(leftButtonOnClickListener);
         buttonRight.setOnClickListener(rightButtonOnClickListener);
@@ -334,7 +348,7 @@ public class HelpOverlay extends RelativeLayout {
          */
         handler = new Handler();
 
-        preferencesManager = new PreferencesManager(getContext());
+        preferencesManager = new HelpOverlayPreferencesManager(getContext());
 
 
         //Setup Eraser

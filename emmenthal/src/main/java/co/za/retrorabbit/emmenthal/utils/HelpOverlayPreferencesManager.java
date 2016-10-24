@@ -6,13 +6,13 @@ import android.content.SharedPreferences;
 /**
  * Created by Werner Scheffer on 14/10/16.
  */
-public class PreferencesManager {
+public class HelpOverlayPreferencesManager {
 
     private static final String PREFERENCES_NAME = "emmenthal_preferences";
 
     private SharedPreferences sharedPreferences;
 
-    public PreferencesManager(Context context) {
+    public HelpOverlayPreferencesManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
