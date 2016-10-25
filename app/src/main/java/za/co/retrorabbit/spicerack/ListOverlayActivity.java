@@ -2,6 +2,7 @@ package za.co.retrorabbit.spicerack;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,22 +32,28 @@ public class ListOverlayActivity extends Activity {
         HelpOverlayPreferencesManager.resetAll(this);
         Toast.makeText(this, "Wait for it", Toast.LENGTH_SHORT).show();
 
-        HelpOverlay.Builder.start(ListOverlayActivity.this)
-                .setLeftButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "LEFT", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setRightButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setConfiguration(MainActivity.getDefaultConfiguration().setDelayBeforeShow(2000))
-                .setUsageId("list_item") //THIS SHOULD BE UNIQUE ID
-                .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HelpOverlay.Builder.start(ListOverlayActivity.this)
+                        .setLeftButtonOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(v.getContext(), "LEFT", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setRightButtonOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setConfiguration(MainActivity.getDefaultConfiguration().setDelayBeforeShow(2000))
+                        .setUsageId("list_item") //THIS SHOULD BE UNIQUE ID
+                        .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);
+            }
+        }, 2000);
+
     }
 
     public ArrayList<Item> getItems() {

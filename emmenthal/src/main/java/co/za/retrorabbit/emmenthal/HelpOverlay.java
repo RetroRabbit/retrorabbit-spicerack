@@ -856,26 +856,30 @@ public class HelpOverlay extends RelativeLayout {
             this.resId = resId;
             this.layoutId = layoutId;
             this.position = position;
-            onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
-                @Override
-                public void onChildViewAttachedToWindow(View view) {
-                    if (((RecyclerView) view.getParent()).getChildViewHolder(view).getAdapterPosition() == HelpOverlay.Builder.this.position
-                            && ((RecyclerView) view.getParent()).getChildViewHolder(view).itemView.getId() == HelpOverlay.Builder.this.layoutId) {
 
-                        HelpOverlay.Builder.this.show(view.findViewById(HelpOverlay.Builder.this.resId));
-                        ((RecyclerView) view.getParent()).removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+            if (recyclerView.findViewHolderForAdapterPosition(this.position) != null) {
+                HelpOverlay.Builder.this.show(recyclerView.findViewHolderForAdapterPosition(this.position).itemView.findViewById(HelpOverlay.Builder.this.resId));
+            } else {
+                onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
+                    @Override
+                    public void onChildViewAttachedToWindow(View view) {
+                        if (((RecyclerView) view.getParent()).getChildViewHolder(view).getAdapterPosition() == HelpOverlay.Builder.this.position
+                                && ((RecyclerView) view.getParent()).getChildViewHolder(view).itemView.getId() == HelpOverlay.Builder.this.layoutId) {
+
+                            HelpOverlay.Builder.this.show(view.findViewById(HelpOverlay.Builder.this.resId));
+                            ((RecyclerView) view.getParent()).removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+
+                        }
+                    }
+
+                    @Override
+                    public void onChildViewDetachedFromWindow(View view) {
 
                     }
-                }
+                };
 
-                @Override
-                public void onChildViewDetachedFromWindow(View view) {
-
-                }
-            };
-
-            recyclerView.addOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
-
+                recyclerView.addOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
+            }
         }
     }
 }
