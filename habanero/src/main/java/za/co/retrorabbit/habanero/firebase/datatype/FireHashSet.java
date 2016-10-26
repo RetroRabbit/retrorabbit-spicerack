@@ -23,13 +23,14 @@ public class FireHashSet<T> implements ChildEventListener {
     ValueParser<T> valueParser;
     private Class<T> mModelClass;
     private Query mQuery;
-    private OnChangedListener<T> mListener;
+    private ArrayList<OnChangedListener<T>> mListeners;
     private FilterableIndexedHashMap<String, T> mObjects;
 
     public FireHashSet(Query mQuery, Class<T> mModelClass) {
         this.mQuery = mQuery;
         this.mModelClass = mModelClass;
         this.mObjects = new FilterableIndexedHashMap<>();
+        this.mListeners = new ArrayList<>();
         mQuery.addChildEventListener(this);
     }
 
@@ -58,7 +59,7 @@ public class FireHashSet<T> implements ChildEventListener {
         return mObjects.getUnfiltered(index);
     }
 
-    protected T parseDataSnapshot(DataSnapshot dataSnapshot) {
+    private T parseDataSnapshot(DataSnapshot dataSnapshot) {
         if (valueParser != null)
             return valueParser.parseDataSnapshot(dataSnapshot);
         return dataSnapshot.getValue(mModelClass);
@@ -94,12 +95,18 @@ public class FireHashSet<T> implements ChildEventListener {
 
     }
 
-    public void setOnChangedListener(OnChangedListener<T> listener) {
-        mListener = listener;
+    public void addOnChangedListener(OnChangedListener<T> listener) {
+        if (mListeners == null) {
+            mListeners = new ArrayList<>();
+        }
+        mListeners.add(listener);
     }
 
-    public void removeOnChangedListener() {
-        mListener = null;
+    public void removeOnChangedListener(OnChangedListener<T> listener) {
+        if (mListeners == null) {
+            return;
+        }
+        mListeners.remove(listener);
     }
 
     protected void notifyChangedListeners(OnChangedListener.EventType type, int index) {
@@ -107,8 +114,10 @@ public class FireHashSet<T> implements ChildEventListener {
     }
 
     protected void notifyChangedListeners(OnChangedListener.EventType type, int index, int oldIndex) {
-        if (mListener != null) {
-            mListener.onChanged(type, index, oldIndex);
+        if (mListeners != null) {
+            for (OnChangedListener<T> mListener : mListeners) {
+                mListener.onChanged(type, index, oldIndex);
+            }
         }
     }
 

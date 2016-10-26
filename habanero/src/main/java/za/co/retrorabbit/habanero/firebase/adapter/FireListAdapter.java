@@ -38,6 +38,43 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     Map<String, Integer> indicatorMap = new LinkedHashMap<>();
     String[] sections = new String[]{};
     Comparator<? super T> sorter;
+    FireHashSet.OnChangedListener onChangedListener = new FireHashSet.OnChangedListener() {
+        @Override
+        public void onChanged(EventType type, int index, int oldIndex) {
+            switch (type) {
+                case Added:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyDataSetChanged();
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Changed:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyDataSetChanged();
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Removed:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyDataSetChanged();
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Moved:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyDataSetChanged();
+                    if (sorter != null)
+                        sort();
+                    break;
+                default:
+                    throw new IllegalStateException("Incomplete case statement");
+            }
+        }
+    };
 
     public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, FireHashSet mData) {
         this.mModelClass = mModelClass;
@@ -167,47 +204,12 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     }
 
     public void addListeners() {
-        mData.setOnChangedListener(new FireHashSet.OnChangedListener() {
-            @Override
-            public void onChanged(EventType type, int index, int oldIndex) {
-                switch (type) {
-                    case Added:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyDataSetChanged();
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Changed:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyDataSetChanged();
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Removed:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyDataSetChanged();
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Moved:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyDataSetChanged();
-                        if (sorter != null)
-                            sort();
-                        break;
-                    default:
-                        throw new IllegalStateException("Incomplete case statement");
-                }
-            }
-        });
+        mData.addOnChangedListener(onChangedListener);
     }
 
     public void removeListeners() {
-        mData.removeOnChangedListener();
+        if (mData != null)
+            mData.removeOnChangedListener(onChangedListener);
     }
 
     public String getFilterConstraint() {

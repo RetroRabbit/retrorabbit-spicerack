@@ -35,6 +35,43 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     Handler filterHandler;
     Runnable filterRunnable;
     Comparator<? super T> sorter;
+    FireHashSet.OnChangedListener onChangedListener = new FireHashSet.OnChangedListener() {
+        @Override
+        public void onChanged(EventType type, int index, int oldIndex) {
+            switch (type) {
+                case Added:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyItemInserted(index);
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Changed:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyItemChanged(index);
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Removed:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyItemRemoved(index);
+                    if (sorter != null)
+                        sort();
+                    break;
+                case Moved:
+                    if (filterConstraint != null)
+                        filterSnapshots();
+                    notifyItemMoved(oldIndex, index);
+                    if (sorter != null)
+                        sort();
+                    break;
+                default:
+                    throw new IllegalStateException("Incomplete case statement");
+            }
+        }
+    };
     private boolean showFooter = false, showHeader = false, showSubHeader = false;
 
     public FireRecyclerAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, DatabaseReference mReference) {
@@ -64,43 +101,7 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public void addListeners() {
-        mData.setOnChangedListener(new FireHashSet.OnChangedListener() {
-            @Override
-            public void onChanged(EventType type, int index, int oldIndex) {
-                switch (type) {
-                    case Added:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyItemInserted(index);
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Changed:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyItemChanged(index);
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Removed:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyItemRemoved(index);
-                        if (sorter != null)
-                            sort();
-                        break;
-                    case Moved:
-                        if (filterConstraint != null)
-                            filterSnapshots();
-                        notifyItemMoved(oldIndex, index);
-                        if (sorter != null)
-                            sort();
-                        break;
-                    default:
-                        throw new IllegalStateException("Incomplete case statement");
-                }
-            }
-        });
+        mData.addOnChangedListener(onChangedListener);
     }
 
     protected void filterSnapshots() {
@@ -406,7 +407,8 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public void removeListeners() {
-        mData.removeOnChangedListener();
+        if (mData != null)
+            mData.removeOnChangedListener(onChangedListener);
     }
 
     public void setRecyclerView(RecyclerView recyclerView) {
