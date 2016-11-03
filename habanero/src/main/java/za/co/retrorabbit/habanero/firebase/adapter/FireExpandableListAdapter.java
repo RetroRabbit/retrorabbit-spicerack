@@ -90,7 +90,7 @@ public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandable
     }
 
     public FireExpandableListAdapter(Class<G> mGroupModelClass, Class<I> mItemModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, Query mQuery) {
-        this(mGroupModelClass, mItemModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, new FireHashSet(mQuery, mModelClass));
+        this(mGroupModelClass, mItemModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, new FireHashSet(mQuery, mGroupModelClass));
     }
 
     public FireExpandableListAdapter(Class<G> mGroupModelClass, Class<I> mItemModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, DatabaseReference mReference) {
