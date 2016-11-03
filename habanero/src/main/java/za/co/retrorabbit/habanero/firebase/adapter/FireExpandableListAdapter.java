@@ -7,10 +7,9 @@ import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.SectionIndexer;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
@@ -28,15 +28,17 @@ import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
 /**
  * Created by wsche on 2016/09/15.
  */
-public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> extends BaseAdapter implements Filterable, SectionIndexer {
-    private Class<T> mModelClass;
-    private int mModelLayout;
-    private Class<VH> mViewHolderClass;
-    private FireHashSet<T> mData;
+public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandableListAdapter.ViewHolder, IVH extends FireExpandableListAdapter.ViewHolder> extends BaseExpandableListAdapter implements Filterable {
+    private Class<G> mModelClass;
+    private int mGroupModelLayout, mItemModelLayout;
+    private Class<GVH> mViewGroupHolderClass;
+    private Class<IVH> mViewItemHolderClass;
+    private FireHashSet<G> mData;
     private String filterConstraint;
     private Map<String, Integer> indicatorMap = new LinkedHashMap<>();
     private String[] sections = new String[]{};
-    private Comparator<? super T> sorter;
+    private Comparator<? super G> sorter;
+    private Comparator<? super I> childSorter;
     private FireHashSet.OnChangedListener onChangedListener = new FireHashSet.OnChangedListener() {
         @Override
         public void onChanged(EventType type, int index, int oldIndex) {
@@ -75,36 +77,54 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         }
     };
 
-    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, FireHashSet mData) {
+    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, FireHashSet mData) {
         this.mModelClass = mModelClass;
-        this.mModelLayout = mModelLayout;
-        this.mViewHolderClass = mViewHolderClass;
+        this.mGroupModelLayout = mGroupModelLayout;
+        this.mItemModelLayout = mItemModelLayout;
+        this.mViewGroupHolderClass = mViewHolderClass;
+        this.mViewItemHolderClass = mViewItemHolderClass;
         this.mData = mData;
         addListeners();
     }
 
-    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, Query mQuery) {
-        this(mModelClass, mModelLayout, mViewHolderClass, new FireHashSet(mQuery, mModelClass));
+    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, Query mQuery) {
+        this(mModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, new FireHashSet(mQuery, mModelClass));
     }
 
-    public FireListAdapter(Class<T> mModelClass, int mModelLayout, Class<VH> mViewHolderClass, DatabaseReference mReference) {
-        this(mModelClass, mModelLayout, mViewHolderClass, (Query) mReference);
+    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, DatabaseReference mReference) {
+        this(mModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, (Query) mReference);
     }
 
     public void setReversed(boolean reversed) {
         mData.setReversed(reversed);
-        if (getCount() > 0)
+        if (getGroupCount() > 0)
             notifyDataSetChanged();
     }
 
-    public void setValueParser(FireHashSet.ValueParser<T> valueParser) {
+    public void setValueParser(FireHashSet.ValueParser<G> valueParser) {
         mData.setValueParser(valueParser);
     }
 
-    public VH onCreateViewHolder(ViewGroup parent, int viewResource) {
+    public GVH onCreateGroupViewHolder(ViewGroup parent, int viewResource) {
         ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewResource, parent, false);
         try {
-            Constructor<VH> constructor = mViewHolderClass.getConstructor(View.class);
+            Constructor<GVH> constructor = mViewGroupHolderClass.getConstructor(View.class);
+            return constructor.newInstance(view);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public IVH onCreateItemViewHolder(ViewGroup parent, int viewResource) {
+        ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(viewResource, parent, false);
+        try {
+            Constructor<IVH> constructor = mViewItemHolderClass.getConstructor(View.class);
             return constructor.newInstance(view);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -118,8 +138,76 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     }
 
     @Override
-    public int getCount() {
+    public int getGroupCount() {
         return mData.size();
+    }
+
+    @Override
+    public final View getGroupView(int position, boolean isExpanded, View convertView, ViewGroup parent) {
+        GVH viewHolder;
+        if (convertView == null) {
+            viewHolder = onCreateGroupViewHolder(parent, getGroupResource(position));
+            convertView = viewHolder.getItemView();
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (GVH) convertView.getTag();
+            convertView = viewHolder.getItemView();
+        }
+        onPopulateGroupViewHolder(viewHolder, getGroup(position), position);
+        return convertView;
+    }
+
+    public int getGroupResource(int position) {
+        return mGroupModelLayout;
+    }
+
+    public int getItemResource(int groupPosition, int childPosition) {
+        return mItemModelLayout;
+    }
+
+    @Override
+    public int getGroupType(int position) {
+        return 1;
+    }
+
+    @Override
+    public long getGroupId(int position) {
+        // http://stackoverflow.com/questions/5100071/whats-the-purpose-of-item-ids-in-android-listview-adapter
+        return mData.getKey(position).hashCode();
+    }
+
+    public abstract List<I> getGroupChildren(G item);
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return getGroupChildren(mData.getItem(groupPosition)).size();
+    }
+
+    @Override
+    public final I getChild(int groupPosition, int childPosition) {
+        List<I> items = getGroupChildren(getGroup(groupPosition));
+        Collections.sort(items, childSorter);
+        return items.get(childPosition);
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        IVH viewHolder;
+        if (convertView == null) {
+            viewHolder = onCreateItemViewHolder(parent, getItemResource(groupPosition, childPosition));
+            convertView = viewHolder.getItemView();
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (IVH) convertView.getTag();
+            convertView = viewHolder.getItemView();
+        }
+        onPopulateItemViewHolder(viewHolder, getChild(groupPosition, childPosition), childPosition);
+        return convertView;
     }
 
     @Override
@@ -131,36 +219,6 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         return null;
     }
 
-    @Override
-    public final View getView(int position, View convertView, ViewGroup parent) {
-        VH viewHolder;
-        if (convertView == null) {
-            viewHolder = onCreateViewHolder(parent, getItemViewResource(position));
-            convertView = viewHolder.getItemView();
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (VH) convertView.getTag();
-            convertView = viewHolder.getItemView();
-        }
-        onPopulateViewHolder(viewHolder, getItem(position), position);
-        return convertView;
-    }
-
-    public int getItemViewResource(int position) {
-        return mModelLayout;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return 1;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        // http://stackoverflow.com/questions/5100071/whats-the-purpose-of-item-ids-in-android-listview-adapter
-        return mData.getKey(position).hashCode();
-    }
-
     public void cleanup() {
         mData.cleanup();
     }
@@ -170,11 +228,13 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
     }
 
     @Override
-    public T getItem(int position) {
+    public G getGroup(int position) {
         return mData.getItem(position);
     }
 
-    protected abstract void onPopulateViewHolder(VH viewHolder, T model, int position);
+    protected abstract void onPopulateGroupViewHolder(GVH viewHolder, G model, int position);
+
+    protected abstract void onPopulateItemViewHolder(IVH viewHolder, I model, int position);
 
     public void filterSnapshots() {
         getFilter().filter(getFilterConstraint());
@@ -194,7 +254,7 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         return getData().indexOf(key);
     }
 
-    public FireHashSet<T> getData() {
+    public FireHashSet<G> getData() {
         return mData;
     }
 
@@ -216,31 +276,7 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
         filterSnapshots();
     }
 
-    @Override
-    public int getPositionForSection(int section) {
-        if (sections != null && sections.length > 0
-                && section >= 0 && sections.length > section
-                && indicatorMap.containsKey(sections[section]))
-            return indicatorMap.get(sections[section]);
-        else
-            return 0;
-    }
-
-    @Override
-    public int getSectionForPosition(int position) {
-        for (int i = sections.length - 1; i >= 0; i--) {
-            if (position > indicatorMap.get(sections[i]))
-                return i;
-        }
-        return 0;
-    }
-
-    @Override
-    public Object[] getSections() {
-        return sections;
-    }
-
-    public void setSorter(Comparator<? super T> sorter) {
+    public void setSorter(Comparator<? super G> sorter) {
         this.sorter = sorter;
     }
 
@@ -258,12 +294,12 @@ public abstract class FireListAdapter<T, VH extends FireListAdapter.ViewHolder> 
      * @param comparator The sorter used to sort the objects contained
      *                   in this adapter.
      */
-    public void sort(@NonNull Comparator<? super T> comparator) {
-        ArrayList<T> sortedList = new ArrayList<T>();
+    public void sort(@NonNull Comparator<? super G> comparator) {
+        ArrayList<G> sortedList = new ArrayList<G>();
         if (mData.isFiltered()) {
-            sortedList = new ArrayList<T>(mData.getFilteredValues().values());
+            sortedList = new ArrayList<G>(mData.getFilteredValues().values());
         } else {
-            sortedList = new ArrayList<T>(mData.getValues().values());
+            sortedList = new ArrayList<G>(mData.getValues().values());
         }
         Collections.sort(sortedList, comparator);
 
