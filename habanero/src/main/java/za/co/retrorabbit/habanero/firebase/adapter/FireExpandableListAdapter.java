@@ -29,7 +29,8 @@ import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
  * Created by wsche on 2016/09/15.
  */
 public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandableListAdapter.ViewHolder, IVH extends FireExpandableListAdapter.ViewHolder> extends BaseExpandableListAdapter implements Filterable {
-    private Class<G> mModelClass;
+    private Class<G> mGroupModelClass;
+    private Class<I> mItemModelClass;
     private int mGroupModelLayout, mItemModelLayout;
     private Class<GVH> mViewGroupHolderClass;
     private Class<IVH> mViewItemHolderClass;
@@ -77,9 +78,10 @@ public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandable
         }
     };
 
-    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, FireHashSet mData) {
-        this.mModelClass = mModelClass;
+    public FireExpandableListAdapter(Class<G> mGroupModelClass, Class<I> mItemModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, FireHashSet mData) {
+        this.mGroupModelClass = mGroupModelClass;
         this.mGroupModelLayout = mGroupModelLayout;
+        this.mItemModelClass = mItemModelClass;
         this.mItemModelLayout = mItemModelLayout;
         this.mViewGroupHolderClass = mViewHolderClass;
         this.mViewItemHolderClass = mViewItemHolderClass;
@@ -87,12 +89,12 @@ public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandable
         addListeners();
     }
 
-    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, Query mQuery) {
-        this(mModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, new FireHashSet(mQuery, mModelClass));
+    public FireExpandableListAdapter(Class<G> mGroupModelClass, Class<I> mItemModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, Query mQuery) {
+        this(mGroupModelClass, mItemModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, new FireHashSet(mQuery, mModelClass));
     }
 
-    public FireExpandableListAdapter(Class<G> mModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, DatabaseReference mReference) {
-        this(mModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, (Query) mReference);
+    public FireExpandableListAdapter(Class<G> mGroupModelClass, Class<I> mItemModelClass, int mGroupModelLayout, int mItemModelLayout, Class<GVH> mViewHolderClass, Class<IVH> mViewItemHolderClass, DatabaseReference mReference) {
+        this(mGroupModelClass, mItemModelClass, mGroupModelLayout, mItemModelLayout, mViewHolderClass, mViewItemHolderClass, (Query) mReference);
     }
 
     public void setReversed(boolean reversed) {
@@ -276,8 +278,12 @@ public abstract class FireExpandableListAdapter<G, I, GVH extends FireExpandable
         filterSnapshots();
     }
 
-    public void setSorter(Comparator<? super G> sorter) {
+    public void setGroupSorter(Comparator<? super G> sorter) {
         this.sorter = sorter;
+    }
+
+    public void setChildSorter(Comparator<? super I> childSorter) {
+        this.childSorter = childSorter;
     }
 
     /**
