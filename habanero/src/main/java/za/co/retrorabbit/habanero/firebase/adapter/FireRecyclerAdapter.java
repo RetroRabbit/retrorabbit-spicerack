@@ -1,8 +1,12 @@
 package za.co.retrorabbit.habanero.firebase.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -19,7 +23,7 @@ import za.co.retrorabbit.habanero.firebase.datatype.FireHashSet;
 /**
  * Created by Werner Scheffer on 2016/09/15.
  */
-public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> implements Filterable {
+public abstract class FireRecyclerAdapter<T, VH extends FireRecyclerAdapter.ViewHolder> extends RecyclerView.Adapter<VH> implements Filterable {
 
     protected static final int TYPE_HEADER = -2;
     protected static final int TYPE_FOOTER = -3;
@@ -454,5 +458,31 @@ public abstract class FireRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
         mData.createIndexMapFromList(sortedList, mData.isFiltered() ? mData.getFilteredValues() : mData.getValues());
         notifyDataSetChanged();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public View getItemView() {
+            return itemView;
+        }
+
+        public Context getContext() {
+            return itemView.getContext();
+        }
+
+        public Activity getActivity() {
+            return (Activity) itemView.getContext();
+        }
+
+        public String getString(@StringRes int res) {
+            return getContext().getString(res);
+        }
+
+        public String getString(@StringRes int res, Object... formatArgs) {
+            return getContext().getString(res, formatArgs);
+        }
     }
 }
