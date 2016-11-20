@@ -31,6 +31,5 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:' + project.repositoryVersion
     compile 'com.android.support:design:' + project.repositoryVersion
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 
 }
