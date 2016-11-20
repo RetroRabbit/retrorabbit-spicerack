@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="co.za.retrorabbit.salt">
+          package="za.co.retrorabbit.salt">
 
     <application
         android:allowBackup="true"
