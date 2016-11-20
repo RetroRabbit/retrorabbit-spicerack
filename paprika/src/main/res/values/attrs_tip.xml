@@ -6,5 +6,7 @@
             <enum name="above" value="0" />
             <enum name="below" value="1" />
         </attr>
+        <attr name="tipShowDuration" format="reference|integer" />
+        <attr name="tipAnimateDuration" format="reference|integer" />
     </declare-styleable>
 </resources>

@@ -73,4 +73,13 @@
         android:layout_below="@+id/button_paprika_tip_coordinator"
         android:onClick="previewPaprikaTip"
         android:text="Show Tip\nCustom View" />
+
+    <Button
+        android:id="@+id/button_paprika_tip_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_paprika_tip_coordinator"
+        android:layout_toEndOf="@+id/button_paprika_tip_custom"
+        android:onClick="previewPaprikaTip"
+        android:text="Show Tip\nProgrammatically" />
 </RelativeLayout>

@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_paprika_tip_custom:
                 intent.putExtra(TipActivity.TIP_LAYOUT, TipActivity.TipLayout.CUSTOM);
                 break;
+            case R.id.button_paprika_tip_code:
+                intent.putExtra(TipActivity.TIP_LAYOUT, TipActivity.TipLayout.COORDINATOR);
+                intent.putExtra(TipActivity.TIP_LAYOUT_CODE, true);
+                break;
 
         }
         startActivity(intent);
