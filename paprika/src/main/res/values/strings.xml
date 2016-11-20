@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Paprika</string>
+    <string name="tipText">Use this to show a small description of content under the toolbar</string>
+</resources>

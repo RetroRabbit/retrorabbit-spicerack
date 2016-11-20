@@ -1,0 +1,10 @@
+<resources>
+    <declare-styleable name="Tip">
+        <attr name="tipText" format="reference|string" />
+        <attr name="tipAnchor" format="reference" />
+        <attr name="tipAnchorGravity" format="enum|integer">
+            <enum name="above" value="0" />
+            <enum name="below" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

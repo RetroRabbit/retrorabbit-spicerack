@@ -1,40 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="za.co.retrorabbit.spicerack.StaticOverlayActivity">
+    tools:context="co.za.retrorabbit.spicerack.StaticOverlayActivity">
 
     <TextView
-        android:text="Overlay"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView"
-        android:textAppearance="@style/AppTheme.TextView.Light.Large"
-        android:textColor="@color/blue_grey_900"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:text="Overlay"
+        android:textAppearance="@style/AppTheme.TextView.Light.Large"
+        android:textColor="@color/blue_grey_900" />
 
     <Button
         android:id="@+id/button_emmenthal_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="previewEmmenthalList"
-        android:text="Preview\nList Overlay"
         android:layout_alignBaseline="@+id/button_emmenthal_static"
         android:layout_alignBottom="@+id/button_emmenthal_static"
-        android:layout_toEndOf="@+id/button_emmenthal_static" />
+        android:layout_toEndOf="@+id/button_emmenthal_static"
+        android:onClick="previewEmmenthalList"
+        android:text="Preview\nList Overlay" />
 
     <Button
         android:id="@+id/button_emmenthal_static"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="previewEmmenthalStatic"
-        android:text="Preview\nStatic Overlay"
+        android:layout_alignStart="@+id/textView"
         android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:onClick="previewEmmenthalStatic"
+        android:text="Preview\nStatic Overlay" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button_emmenthal_static"
+        android:layout_below="@+id/button_emmenthal_static"
+        android:text="Tip"
+        android:textAppearance="@style/AppTheme.TextView.Light.Large"
+        android:textColor="@color/blue_grey_900" />
+
+    <Button
+        android:id="@+id/button_paprika_tip_coordinator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textView2"
+        android:onClick="previewPaprikaTip"
+        android:text="Show Tip\nCoordinator Layout" />
+
+    <Button
+        android:id="@+id/button_paprika_tip_relative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_paprika_tip_coordinator"
+        android:layout_toEndOf="@+id/button_paprika_tip_coordinator"
+        android:onClick="previewPaprikaTip"
+        android:text="Show Tip\nRelative Layout" />
+
+    <Button
+        android:id="@+id/button_paprika_tip_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button_paprika_tip_coordinator"
+        android:layout_below="@+id/button_paprika_tip_coordinator"
+        android:onClick="previewPaprikaTip"
+        android:text="Show Tip\nCustom View" />
 </RelativeLayout>
