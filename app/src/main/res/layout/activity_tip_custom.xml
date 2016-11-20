@@ -35,7 +35,7 @@
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <co.za.retrorabbit.paprika.Tip
+    <za.co.retrorabbit.paprika.Tip
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/topBackColor"
@@ -54,5 +54,5 @@
             android:gravity="center"
             android:layout_height="wrap_content"
             android:text="@string/tipText" />
-    </co.za.retrorabbit.paprika.Tip>
+    </za.co.retrorabbit.paprika.Tip>
 </android.support.design.widget.CoordinatorLayout>

@@ -4,7 +4,7 @@
     android:id="@+id/activity_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.za.retrorabbit.spicerack.StaticOverlayActivity">
+    tools:context="za.co.retrorabbit.spicerack.StaticOverlayActivity">
 
     <TextView
         android:id="@+id/textView"

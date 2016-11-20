@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.za.retrorabbit.spicerack">
+    package="za.co.retrorabbit.spicerack">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -14,18 +14,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="co.za.retrorabbit.spicerack.MainActivity">
+        <activity android:name="za.co.retrorabbit.spicerack.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="co.za.retrorabbit.spicerack.StaticOverlayActivity" />
+        <activity android:name="za.co.retrorabbit.spicerack.StaticOverlayActivity" />
         <activity
-            android:name="co.za.retrorabbit.spicerack.ListOverlayActivity"
+            android:name="za.co.retrorabbit.spicerack.ListOverlayActivity"
             android:label="@string/title_activity_list_overlay" />
-        <activity android:name="co.za.retrorabbit.spicerack.TipActivity" />
+        <activity android:name="za.co.retrorabbit.spicerack.TipActivity" />
     </application>
 
 </manifest>
