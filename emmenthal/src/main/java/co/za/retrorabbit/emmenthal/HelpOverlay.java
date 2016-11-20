@@ -42,7 +42,7 @@ import co.za.retrorabbit.emmenthal.utils.HelpOverlayConfiguration;
 import co.za.retrorabbit.emmenthal.utils.HelpOverlayPreferencesManager;
 
 /**
- * TODO: document your custom view class.
+ * Shows a overlay that focuses on a specific view and allows two actions.
  */
 public class HelpOverlay extends RelativeLayout {
 
