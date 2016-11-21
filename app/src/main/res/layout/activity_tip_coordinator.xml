@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,6 +21,14 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
+
+            <Button
+                android:id="@+id/showTipButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="showTipAgain"
+                android:text="Show Again" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -30,12 +39,24 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="10000dp">
+            android:layout_height="10000dp"
+            android:background="@color/colorBackground">
+
+
+            <ImageView
+                android:id="@+id/scrollViewChild"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:background="@color/colorBackground">
+
+            </ImageView>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <za.co.retrorabbit.paprika.Tip
+        android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/topBackColor"
@@ -45,5 +66,8 @@
         android:paddingTop="16dp"
         app:tipAnchor="@+id/appbar"
         app:tipAnchorGravity="below"
+        app:tipAnimateDuration="@integer/animationDuration"
+        app:tipShowDuration="@integer/showDuration"
         app:tipText="@string/tipText" />
+
 </android.support.design.widget.CoordinatorLayout>
