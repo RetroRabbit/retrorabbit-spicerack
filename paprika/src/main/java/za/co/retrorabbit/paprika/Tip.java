@@ -88,10 +88,17 @@ public class Tip extends FrameLayout {
                         case BELOW:
                             mLayoutParameterMain.anchorGravity = Gravity.BOTTOM;
                             break;
+                        case TOP:
+                            mLayoutParameterMain.anchorGravity = Gravity.TOP;
+                            break;
+                        case BOTTOM:
+                            mLayoutParameterMain.anchorGravity = Gravity.BOTTOM;
+                            break;
 
                     }
 
-                    mLayoutParameterMain.setAnchorId(mAnchor);
+                    if (mAnchor != 0)
+                        mLayoutParameterMain.setAnchorId(mAnchor);
                     mLayoutParameterMain.setBehavior(new AppBarLayout.ScrollingViewBehavior());
                     Tip.this.setLayoutParams(mLayoutParameterMain);
                 } else if (getParent() instanceof RelativeLayout) {
@@ -103,12 +110,17 @@ public class Tip extends FrameLayout {
                         case BELOW:
                             mLayoutParameterMain.addRule(RelativeLayout.BELOW, mAnchor);
                             break;
+                        case TOP:
+                            mLayoutParameterMain.addRule(RelativeLayout.ALIGN_TOP, mAnchor);
+                            break;
+                        case BOTTOM:
+                            mLayoutParameterMain.addRule(RelativeLayout.ALIGN_BOTTOM, mAnchor);
+                            break;
 
                     }
                     Tip.this.setLayoutParams(mLayoutParameterMain);
                 }
-                requestLayout();
-                Tip.this.postDelayed(new Runnable() {
+                Tip.this.post(new Runnable() {
                     @Override
                     public void run() {
                         mHeight = Tip.this.getMeasuredHeight();
@@ -116,7 +128,7 @@ public class Tip extends FrameLayout {
                         startShowAnimation();
 
                     }
-                }, 100);
+                });
             }
         });
 
@@ -172,7 +184,6 @@ public class Tip extends FrameLayout {
         anim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Tip.this.setVisibility(VISIBLE);
             }
 
             @Override
@@ -325,7 +336,9 @@ public class Tip extends FrameLayout {
     public enum AnchorGravity {
 
         ABOVE(0),
-        BELOW(1);
+        BELOW(1),
+        TOP(0),
+        BOTTOM(0);
 
         private static Map<Integer, AnchorGravity> map = new HashMap<>();
 

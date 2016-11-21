@@ -39,7 +39,18 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="10000dp">
+            android:layout_height="10000dp"
+            android:background="@color/colorBackground">
+
+
+            <ImageView
+                android:id="@+id/scrollViewChild"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:background="@color/colorBackground">
+
+            </ImageView>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -58,4 +69,5 @@
         app:tipAnimateDuration="@integer/animationDuration"
         app:tipShowDuration="@integer/showDuration"
         app:tipText="@string/tipText" />
+
 </android.support.design.widget.CoordinatorLayout>
