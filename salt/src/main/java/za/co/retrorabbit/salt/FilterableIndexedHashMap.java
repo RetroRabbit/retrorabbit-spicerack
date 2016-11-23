@@ -203,7 +203,7 @@ public class FilterableIndexedHashMap<K, T> {
 
     public K getKey(int index) {
         if (mReversed)
-            index = mIndexMap.size() - index + 1;
+            index = mIndexMap.size() - index - 1;
         if (mIndexMap != null && index >= 0 && index < mIndexMap.size())
             return mIndexMap.get(index);
         return null;
