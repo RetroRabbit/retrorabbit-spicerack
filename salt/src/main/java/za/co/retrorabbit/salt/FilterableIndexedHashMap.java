@@ -19,6 +19,14 @@ public class FilterableIndexedHashMap<K, T> {
         mIndexMap = new ArrayList<>();
     }
 
+    public boolean containsKey(K key){
+        return mValueMap.containsKey(key);
+    }
+
+    public boolean containsValue(T value){
+        return mValueMap.containsValue(value);
+    }
+
     private void moveBackup(K key, K parentKey) {
         int oldIndex = mIndexMapBackup.indexOf(key);
         if (oldIndex >= 0 && oldIndex < mIndexMapBackup.size())

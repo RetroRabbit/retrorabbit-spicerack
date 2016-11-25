@@ -23,19 +23,22 @@ public class FireHashSet<T> implements ChildEventListener {
     ValueParser<T> valueParser;
     private Class<T> mModelClass;
     private Query mQuery;
+    private Query mBatchedQuery;
     private ArrayList<OnChangedListener<T>> mListeners;
     private FilterableIndexedHashMap<String, T> mObjects;
+    private int mBatchIncrement, mCurrentIncrement;
 
     public FireHashSet(Query mQuery, Class<T> mModelClass) {
         this.mQuery = mQuery;
+        this.mBatchedQuery = mQuery;
         this.mModelClass = mModelClass;
         this.mObjects = new FilterableIndexedHashMap<>();
         this.mListeners = new ArrayList<>();
-        mQuery.addChildEventListener(this);
+        mBatchedQuery.addChildEventListener(this);
     }
 
     public void cleanup() {
-        mQuery.removeEventListener(this);
+        mBatchedQuery.removeEventListener(this);
     }
 
     public int getCount() {
@@ -43,8 +46,12 @@ public class FireHashSet<T> implements ChildEventListener {
 
     }
 
-    protected Query getQuery() {
+    protected Query getBaseQuery() {
         return mQuery;
+    }
+
+    protected Query getQuery() {
+        return mBatchedQuery;
     }
 
     public DatabaseReference getReference() {
@@ -67,6 +74,9 @@ public class FireHashSet<T> implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+        if(mObjects.containsKey(dataSnapshot.getKey()))
+            return;
+
         int index = mObjects.addOrUpdate(previousChildName, dataSnapshot.getKey(), parseDataSnapshot(dataSnapshot));
         notifyChangedListeners(OnChangedListener.EventType.Added, index);
     }
@@ -139,6 +149,26 @@ public class FireHashSet<T> implements ChildEventListener {
 
     public void setReversed(boolean reversed) {
         mObjects.setReversed(reversed);
+    }
+
+    public void setBatching(int batchIncrement) {
+        if (batchIncrement > 0) {
+            mBatchIncrement = batchIncrement;
+            incrementBatch();
+        } else if (mBatchedQuery != null) {
+            mBatchedQuery.removeEventListener(this);
+            mBatchedQuery = mQuery;
+            mBatchedQuery.addChildEventListener(this);
+        }
+    }
+
+    public void incrementBatch() {
+        if (mBatchedQuery != null && mBatchIncrement > 0) {
+            mBatchedQuery.removeEventListener(this);
+            mCurrentIncrement += mBatchIncrement;
+            mBatchedQuery = mQuery.limitToFirst(mCurrentIncrement);
+            mBatchedQuery.addChildEventListener(this);
+        }
     }
 
     public void setFilteredMap(ArrayList<String> keys) {
