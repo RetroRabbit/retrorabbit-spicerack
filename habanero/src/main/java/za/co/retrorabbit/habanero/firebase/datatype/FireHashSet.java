@@ -90,7 +90,7 @@ public class FireHashSet<T> implements ChildEventListener {
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         int index = mObjects.remove(dataSnapshot.getKey());
-        if (index <= -1)
+        if (index > -1)
             notifyChangedListeners(OnChangedListener.EventType.Removed, index);
     }
 
