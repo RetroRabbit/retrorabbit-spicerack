@@ -27,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -46,6 +45,7 @@ import za.co.retrorabbit.emmenthal.utils.HelpOverlayPreferencesManager;
  * Shows a overlay that focuses on a specific view and allows two actions.
  */
 public class HelpOverlay extends RelativeLayout {
+
 
     /**
      * Configuration to use for Overlay
@@ -539,7 +539,7 @@ public class HelpOverlay extends RelativeLayout {
         AnimationFactory.animateFadeOut(this, configuration.getFadeAnimationDuration(), new AnimationListener.OnAnimationEndListener() {
             @Override
             public void onAnimationEnd() {
-                setVisibility(GONE);
+                setVisibility(INVISIBLE);
                 removeMaterialView();
 
                 if (materialIntroListener != null)
@@ -784,6 +784,7 @@ public class HelpOverlay extends RelativeLayout {
      */
     public static class Builder {
 
+        private View touchBlocker;
         private HelpOverlay materialIntroView;
         private Activity activity;
         private RecyclerView.OnChildAttachStateChangeListener onChildAttachStateChangeListener;
@@ -803,6 +804,9 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private HelpOverlay build() {
+            touchBlocker = new View(activity);
+            //TODO: Remove
+            touchBlocker.setBackgroundColor(ResourcesCompat.getColor(activity.getResources(), R.color.red_900, activity.getTheme()));
 
             materialIntroView.populate();
 
@@ -887,17 +891,13 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private void enableWindow() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            }, 2000);
+            if (touchBlocker.getParent() != null)
+                ((ViewGroup) activity.getWindow().getDecorView()).removeView(touchBlocker);
         }
 
         private void disableWindow() {
-            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if (touchBlocker.getParent() == null)
+                ((ViewGroup) activity.getWindow().getDecorView()).addView(touchBlocker);
         }
     }
 }
