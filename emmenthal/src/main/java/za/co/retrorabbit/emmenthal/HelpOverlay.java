@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -839,12 +840,13 @@ public class HelpOverlay extends RelativeLayout {
             if (materialIntroView.getConfiguration() == null)
                 materialIntroView.setConfiguration(new HelpOverlayConfiguration());
 
-
+            disableWindow();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     materialIntroView.setTarget(new ViewTarget(view));
                     build().show(activity);
+                    enableWindow();
                 }
             }, materialIntroView.getConfiguration().getDelayBeforeShow());
 
@@ -857,8 +859,10 @@ public class HelpOverlay extends RelativeLayout {
             this.layoutId = layoutId;
             this.position = position;
 
+            disableWindow();
             if (recyclerView.findViewHolderForAdapterPosition(this.position) != null) {
                 HelpOverlay.Builder.this.show(recyclerView.findViewHolderForAdapterPosition(this.position).itemView.findViewById(HelpOverlay.Builder.this.resId));
+                enableWindow();
             } else {
                 onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
                     @Override
@@ -868,7 +872,7 @@ public class HelpOverlay extends RelativeLayout {
 
                             HelpOverlay.Builder.this.show(view.findViewById(HelpOverlay.Builder.this.resId));
                             ((RecyclerView) view.getParent()).removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
-
+                            enableWindow();
                         }
                     }
 
@@ -880,6 +884,15 @@ public class HelpOverlay extends RelativeLayout {
 
                 recyclerView.addOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
             }
+        }
+
+        private void enableWindow() {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+
+        private void disableWindow() {
+            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
     }
 }
