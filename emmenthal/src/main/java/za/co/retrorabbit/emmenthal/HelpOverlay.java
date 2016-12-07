@@ -887,7 +887,12 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private void enableWindow() {
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            }, 2000);
         }
 
         private void disableWindow() {
