@@ -804,10 +804,6 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private HelpOverlay build() {
-            touchBlocker = new View(activity);
-            //TODO: Remove
-            touchBlocker.setBackgroundColor(ResourcesCompat.getColor(activity.getResources(), R.color.red_900, activity.getTheme()));
-
             materialIntroView.populate();
 
             materialIntroView.setCircle(new Circle(
@@ -891,13 +887,26 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private void enableWindow() {
+            if (touchBlocker == null) {
+                createTouchBlocker();
+            }
             if (touchBlocker.getParent() != null)
                 ((ViewGroup) activity.getWindow().getDecorView()).removeView(touchBlocker);
         }
 
+
         private void disableWindow() {
+            if (touchBlocker == null) {
+                createTouchBlocker();
+            }
             if (touchBlocker.getParent() == null)
                 ((ViewGroup) activity.getWindow().getDecorView()).addView(touchBlocker);
+        }
+
+        private void createTouchBlocker() {
+            touchBlocker = new View(activity);
+            //TODO: Remove
+            touchBlocker.setBackgroundColor(ResourcesCompat.getColor(activity.getResources(), R.color.red_900, activity.getTheme()));
         }
     }
 }
