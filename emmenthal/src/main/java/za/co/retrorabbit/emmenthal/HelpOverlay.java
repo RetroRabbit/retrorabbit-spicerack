@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
 import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -784,7 +785,7 @@ public class HelpOverlay extends RelativeLayout {
      */
     public static class Builder {
 
-        private View touchBlocker;
+        private BlockingView touchBlocker;
         private HelpOverlay materialIntroView;
         private Activity activity;
         private RecyclerView.OnChildAttachStateChangeListener onChildAttachStateChangeListener;
@@ -795,7 +796,14 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         public static Builder start(Activity activity) {
-            return new Builder(activity);
+            final Builder builder = new Builder(activity);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    builder.disableWindow();
+                }
+            });
+            return builder;
         }
 
         public Builder setConfiguration(HelpOverlayConfiguration config) {
@@ -840,13 +848,19 @@ public class HelpOverlay extends RelativeLayout {
             if (materialIntroView.getConfiguration() == null)
                 materialIntroView.setConfiguration(new HelpOverlayConfiguration());
 
-            disableWindow();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     materialIntroView.setTarget(new ViewTarget(view));
+ 
                     build().show(activity);
-                    enableWindow();
+
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            enableWindow();
+                        }
+                    }, materialIntroView.getConfiguration().getFadeAnimationDuration() + 100);
                 }
             }, materialIntroView.getConfiguration().getDelayBeforeShow());
 
@@ -858,11 +872,9 @@ public class HelpOverlay extends RelativeLayout {
             this.resId = resId;
             this.layoutId = layoutId;
             this.position = position;
-
-            disableWindow();
             if (recyclerView.findViewHolderForAdapterPosition(this.position) != null) {
                 HelpOverlay.Builder.this.show(recyclerView.findViewHolderForAdapterPosition(this.position).itemView.findViewById(HelpOverlay.Builder.this.resId));
-                enableWindow();
+
             } else {
                 onChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
                     @Override
@@ -872,7 +884,7 @@ public class HelpOverlay extends RelativeLayout {
 
                             HelpOverlay.Builder.this.show(view.findViewById(HelpOverlay.Builder.this.resId));
                             ((RecyclerView) view.getParent()).removeOnChildAttachStateChangeListener(onChildAttachStateChangeListener);
-                            enableWindow();
+
                         }
                     }
 
@@ -887,26 +899,56 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         private void enableWindow() {
-            if (touchBlocker == null) {
-                createTouchBlocker();
-            }
-            if (touchBlocker.getParent() != null)
+            createTouchBlocker();
+
+            if (touchBlocker.getParent() != null) {
                 ((ViewGroup) activity.getWindow().getDecorView()).removeView(touchBlocker);
+            }
         }
 
 
         private void disableWindow() {
-            if (touchBlocker == null) {
-                createTouchBlocker();
-            }
-            if (touchBlocker.getParent() == null)
+            createTouchBlocker();
+
+            if (touchBlocker.getParent() == null) {
                 ((ViewGroup) activity.getWindow().getDecorView()).addView(touchBlocker);
+            }
         }
 
         private void createTouchBlocker() {
-            touchBlocker = new View(activity);
-            //TODO: Remove
-            touchBlocker.setBackgroundColor(ResourcesCompat.getColor(activity.getResources(), R.color.red_900, activity.getTheme()));
+            if (touchBlocker == null) {
+                touchBlocker = new BlockingView(activity);
+            }
+        }
+    }
+
+    static class BlockingView extends ViewGroup {
+
+        public BlockingView(Context context) {
+            super(context);
+        }
+
+        public BlockingView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public BlockingView(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        public BlockingView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            return true;
         }
     }
 }
