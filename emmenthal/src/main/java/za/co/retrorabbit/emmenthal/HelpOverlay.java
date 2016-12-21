@@ -196,6 +196,15 @@ public class HelpOverlay extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
+        if (Build.VERSION.SDK_INT < 16) {
+            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+        } else {
+            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
+        }
+    }
+
     public void populate() {
         setWillNotDraw(false);
         setVisibility(INVISIBLE);
@@ -207,23 +216,23 @@ public class HelpOverlay extends RelativeLayout {
         buttonLeft = (Button) view.findViewById(R.id.button_left);
         buttonRight = (Button) view.findViewById(R.id.button_right);
         dotView = LayoutInflater.from(getContext()).inflate(R.layout.dotview, null);
-        if (leftButtonOnClickListener == null)
-            setLeftButtonOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-        if (rightButtonOnClickListener == null)
-            setRightButtonOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
+        buttonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (leftButtonOnClickListener != null)
+                    leftButtonOnClickListener.onClick(v);
+                dismiss();
+            }
+        });
+        buttonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rightButtonOnClickListener != null)
+                    rightButtonOnClickListener.onClick(v);
+                dismiss();
+            }
+        });
 
-        buttonLeft.setOnClickListener(leftButtonOnClickListener);
-        buttonRight.setOnClickListener(rightButtonOnClickListener);
 
         setTitleStyle(configuration.getTitleStyle());
         setMessageStyle(configuration.getMessageStyle());
@@ -393,15 +402,6 @@ public class HelpOverlay extends RelativeLayout {
             }
         });
 
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
-        if (Build.VERSION.SDK_INT < 16) {
-            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
-        } else {
-            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
-        }
     }
 
     @Override
@@ -785,6 +785,7 @@ public class HelpOverlay extends RelativeLayout {
      */
     public static class Builder {
 
+        int resId, layoutId, position;
         private BlockingView touchBlocker;
         private HelpOverlay materialIntroView;
         private Activity activity;
@@ -852,7 +853,7 @@ public class HelpOverlay extends RelativeLayout {
                 @Override
                 public void run() {
                     materialIntroView.setTarget(new ViewTarget(view));
- 
+
                     build().show(activity);
 
                     view.postDelayed(new Runnable() {
@@ -865,8 +866,6 @@ public class HelpOverlay extends RelativeLayout {
             }, materialIntroView.getConfiguration().getDelayBeforeShow());
 
         }
-
-        int resId, layoutId, position;
 
         public void show(@IdRes int resId, @IdRes int layoutId, RecyclerView recyclerView, int position) {
             this.resId = resId;
