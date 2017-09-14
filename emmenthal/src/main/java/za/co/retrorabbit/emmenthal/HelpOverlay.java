@@ -522,39 +522,6 @@ public class HelpOverlay extends RelativeLayout {
                     materialIntroListener.onUserClicked(materialIntroViewId);
             }
         });
-    }    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (!isReady) return;
-
-        if (bitmap == null || canvas == null) {
-            if (bitmap != null) bitmap.recycle();
-
-            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            this.canvas = new Canvas(bitmap);
-        }
-
-        /**
-         * Draw mask
-         */
-        this.canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        this.canvas.drawColor(maskColor);
-        /**
-         * Clear focus area
-         */
-        circleShape.draw(this.canvas, eraser, cutoutRadius + cutoutStrokeSize);
-        /**
-         * Draw Stroke Area
-         */
-        circleShape.draw(this.canvas, stroke, cutoutRadius + cutoutStrokeSize);
-
-        /**
-         * Clear focus area
-         */
-        circleShape.draw(this.canvas, eraser, cutoutRadius);
-
-        canvas.drawBitmap(bitmap, 0, 0, null);
     }
 
     private void removeMaterialView() {
@@ -638,6 +605,39 @@ public class HelpOverlay extends RelativeLayout {
                     AnimationFactory.performAnimation(dotView);
             }
         });
+    }    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (!isReady) return;
+
+        if (bitmap == null || canvas == null) {
+            if (bitmap != null) bitmap.recycle();
+
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            this.canvas = new Canvas(bitmap);
+        }
+
+        /**
+         * Draw mask
+         */
+        this.canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        this.canvas.drawColor(maskColor);
+        /**
+         * Clear focus area
+         */
+        circleShape.draw(this.canvas, eraser, cutoutRadius + cutoutStrokeSize);
+        /**
+         * Draw Stroke Area
+         */
+        circleShape.draw(this.canvas, stroke, cutoutRadius + cutoutStrokeSize);
+
+        /**
+         * Clear focus area
+         */
+        circleShape.draw(this.canvas, eraser, cutoutRadius);
+
+        canvas.drawBitmap(bitmap, 0, 0, null);
     }
 
     /**
@@ -690,11 +690,17 @@ public class HelpOverlay extends RelativeLayout {
     }
 
     public void setButtonColorRight(@ColorInt int color) {
-        buttonRight.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        if (color == Color.TRANSPARENT)
+            buttonRight.setBackground(null);
+        else
+            buttonRight.getBackground().setColorFilter(color, PorterDuff.Mode.SRC);
     }
 
     public void setButtonColorLeft(@ColorInt int color) {
-        buttonLeft.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        if (color == Color.TRANSPARENT)
+            buttonLeft.setBackground(null);
+        else
+            buttonLeft.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     public void setButtonTextColorRight(@ColorInt int color) {
