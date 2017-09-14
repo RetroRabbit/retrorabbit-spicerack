@@ -2,6 +2,7 @@ package za.co.retrorabbit.spicerack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.transition.VisibilityPropagation;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -38,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 .setButtonColorResourceLeft(R.color.brown_200)
                 .setButtonColorResourceRight(R.color.brown_200)
                 .setButtonTextResourceLeft(android.R.string.yes)
-                .setButtonTextResourceRight(android.R.string.no);
+                .setButtonTextResourceRight(android.R.string.no)
+                .setButtonVisibilityRight(HelpOverlayConfiguration.Visibility.VISIBLE)
+                .setButtonVisibilityLeft(HelpOverlayConfiguration.Visibility.GONE);
     }
 
     @Override

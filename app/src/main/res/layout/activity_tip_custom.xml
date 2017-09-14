@@ -54,7 +54,6 @@
             android:id="@+id/tipCustomText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/common_google_signin_btn_icon_dark"
             android:gravity="center"
             android:text="@string/tipText" />
     </za.co.retrorabbit.paprika.Tip>

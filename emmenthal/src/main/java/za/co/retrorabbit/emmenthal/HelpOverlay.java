@@ -196,6 +196,66 @@ public class HelpOverlay extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        width = getMeasuredWidth();
+        height = getMeasuredHeight();
+    }
+
+    /**
+     * Perform click operation when user
+     * touches on target circle.
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float xT = event.getX();
+        float yT = event.getY();
+
+        int xV = circleShape.getPoint().x;
+        int yV = circleShape.getPoint().y;
+
+        int radius = circleShape.getRadius();
+
+        double dx = Math.pow(xT - xV, 2);
+        double dy = Math.pow(yT - yV, 2);
+
+        boolean isTouchOnFocus = (dx + dy) <= Math.pow(radius, 2);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+                if (isTouchOnFocus && configuration.isClickTargetOnTouch()) {
+                    targetView.getView().setPressed(true);
+                    targetView.getView().invalidate();
+                }
+
+                return true;
+            case MotionEvent.ACTION_UP:
+
+                if (isTouchOnFocus || configuration.isDismissOnTouch())
+                    dismiss();
+
+                if (isTouchOnFocus && configuration.isClickTargetOnTouch()) {
+                    targetView.getView().performClick();
+                    targetView.getView().setPressed(true);
+                    targetView.getView().invalidate();
+                    targetView.getView().setPressed(false);
+                    targetView.getView().invalidate();
+                }
+
+                return true;
+            default:
+                break;
+        }
+
+        return super.onTouchEvent(event);
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
         if (Build.VERSION.SDK_INT < 16) {
@@ -286,6 +346,16 @@ public class HelpOverlay extends RelativeLayout {
             setButtonTextColorRight(configuration.getButtonTextColorRight());
         } else if (configuration.getButtonTextColorResourceRight() != null) {
             setButtonTextColorRight(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonTextColorResourceRight(), getContext().getTheme()));
+        }
+
+        //Configure Right Button Visibility
+        if (configuration.getButtonVisibilityRight() != null) {
+            setButtonVisibilityRight(configuration.getButtonVisibilityRight());
+        }
+
+        //Configure Left Button Visibility
+        if (configuration.getButtonVisibilityLeft() != null) {
+            setButtonVisibilityLeft(configuration.getButtonVisibilityLeft());
         }
 
         //Configure Title Text Color
@@ -404,101 +474,6 @@ public class HelpOverlay extends RelativeLayout {
 
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        width = getMeasuredWidth();
-        height = getMeasuredHeight();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (!isReady) return;
-
-        if (bitmap == null || canvas == null) {
-            if (bitmap != null) bitmap.recycle();
-
-            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            this.canvas = new Canvas(bitmap);
-        }
-
-        /**
-         * Draw mask
-         */
-        this.canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        this.canvas.drawColor(maskColor);
-        /**
-         * Clear focus area
-         */
-        circleShape.draw(this.canvas, eraser, cutoutRadius + cutoutStrokeSize);
-        /**
-         * Draw Stroke Area
-         */
-        circleShape.draw(this.canvas, stroke, cutoutRadius + cutoutStrokeSize);
-
-        /**
-         * Clear focus area
-         */
-        circleShape.draw(this.canvas, eraser, cutoutRadius);
-
-        canvas.drawBitmap(bitmap, 0, 0, null);
-    }
-
-    /**
-     * Perform click operation when user
-     * touches on target circle.
-     *
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float xT = event.getX();
-        float yT = event.getY();
-
-        int xV = circleShape.getPoint().x;
-        int yV = circleShape.getPoint().y;
-
-        int radius = circleShape.getRadius();
-
-        double dx = Math.pow(xT - xV, 2);
-        double dy = Math.pow(yT - yV, 2);
-
-        boolean isTouchOnFocus = (dx + dy) <= Math.pow(radius, 2);
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-
-                if (isTouchOnFocus && configuration.isClickTargetOnTouch()) {
-                    targetView.getView().setPressed(true);
-                    targetView.getView().invalidate();
-                }
-
-                return true;
-            case MotionEvent.ACTION_UP:
-
-                if (isTouchOnFocus || configuration.isDismissOnTouch())
-                    dismiss();
-
-                if (isTouchOnFocus && configuration.isClickTargetOnTouch()) {
-                    targetView.getView().performClick();
-                    targetView.getView().setPressed(true);
-                    targetView.getView().invalidate();
-                    targetView.getView().setPressed(false);
-                    targetView.getView().invalidate();
-                }
-
-                return true;
-            default:
-                break;
-        }
-
-        return super.onTouchEvent(event);
-    }
-
     /**
      * Shows material view with fade in
      * animation
@@ -547,6 +522,39 @@ public class HelpOverlay extends RelativeLayout {
                     materialIntroListener.onUserClicked(materialIntroViewId);
             }
         });
+    }    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (!isReady) return;
+
+        if (bitmap == null || canvas == null) {
+            if (bitmap != null) bitmap.recycle();
+
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            this.canvas = new Canvas(bitmap);
+        }
+
+        /**
+         * Draw mask
+         */
+        this.canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        this.canvas.drawColor(maskColor);
+        /**
+         * Clear focus area
+         */
+        circleShape.draw(this.canvas, eraser, cutoutRadius + cutoutStrokeSize);
+        /**
+         * Draw Stroke Area
+         */
+        circleShape.draw(this.canvas, stroke, cutoutRadius + cutoutStrokeSize);
+
+        /**
+         * Clear focus area
+         */
+        circleShape.draw(this.canvas, eraser, cutoutRadius);
+
+        canvas.drawBitmap(bitmap, 0, 0, null);
     }
 
     private void removeMaterialView() {
@@ -691,6 +699,35 @@ public class HelpOverlay extends RelativeLayout {
 
     public void setButtonTextColorRight(@ColorInt int color) {
         buttonRight.setTextColor(color);
+    }
+
+    public void setButtonVisibilityLeft(HelpOverlayConfiguration.Visibility visibility) {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) buttonRight.getLayoutParams();
+        switch (visibility) {
+            case GONE:
+                lp.removeRule(RelativeLayout.END_OF);
+                lp.addRule(RelativeLayout.ALIGN_START, R.id.textview_message);
+                buttonRight.setLayoutParams(lp);
+                buttonLeft.setVisibility(View.GONE);
+                break;
+            default:
+                lp.removeRule(RelativeLayout.ALIGN_START);
+                lp.addRule(RelativeLayout.END_OF, R.id.button_left);
+                buttonRight.setLayoutParams(lp);
+                buttonLeft.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    public void setButtonVisibilityRight(HelpOverlayConfiguration.Visibility visibility) {
+        switch (visibility) {
+            case GONE:
+                buttonRight.setVisibility(View.GONE);
+                break;
+            default:
+                buttonRight.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     public void setButtonTextColorLeft(@ColorInt int color) {
@@ -950,4 +987,8 @@ public class HelpOverlay extends RelativeLayout {
             return true;
         }
     }
+
+
+
+
 }

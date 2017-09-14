@@ -146,6 +146,11 @@ public class HelpOverlayConfiguration {
     @ColorRes
     private Integer titleResourceColor, messageResourceColor;
 
+    /**
+     * Current Visible state for Left and Right Button
+     */
+    private Visibility buttonVisibilityLeft, buttonVisibilityRight;
+
     private Integer cutoutRadius;
     private Integer cutoutStroke;
     private Integer infoMargin;
@@ -182,6 +187,11 @@ public class HelpOverlayConfiguration {
         return messageText;
     }
 
+    public HelpOverlayConfiguration setMessageText(String messageText) {
+        this.messageText = messageText;
+        return this;
+    }
+
     @StyleRes
     public Integer getMessageStyle() {
         return messageStyle;
@@ -199,11 +209,6 @@ public class HelpOverlayConfiguration {
 
     public HelpOverlayConfiguration setTitleStyle(Integer titleStyle) {
         this.titleStyle = titleStyle;
-        return this;
-    }
-
-    public HelpOverlayConfiguration setMessageText(String messageText) {
-        this.messageText = messageText;
         return this;
     }
 
@@ -235,14 +240,14 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    public HelpOverlayConfiguration setCutoutColorResource(@ColorRes Integer cutoutColorResource) {
-        this.cutoutColorResource = cutoutColorResource;
-        return this;
-    }
-
     @ColorRes
     public Integer getCutoutColorResource() {
         return cutoutColorResource;
+    }
+
+    public HelpOverlayConfiguration setCutoutColorResource(@ColorRes Integer cutoutColorResource) {
+        this.cutoutColorResource = cutoutColorResource;
+        return this;
     }
 
     @ColorInt
@@ -318,8 +323,8 @@ public class HelpOverlayConfiguration {
         return messageResourceColor;
     }
 
-    public HelpOverlayConfiguration setMessageColor(Integer messageColor) {
-        this.messageColor = messageColor;
+    public HelpOverlayConfiguration setMessageResourceColor(Integer messageColor) {
+        this.messageResourceColor = messageColor;
         return this;
     }
 
@@ -460,8 +465,8 @@ public class HelpOverlayConfiguration {
         return messageColor;
     }
 
-    public HelpOverlayConfiguration setMessageResourceColor(Integer messageColor) {
-        this.messageResourceColor = messageColor;
+    public HelpOverlayConfiguration setMessageColor(Integer messageColor) {
+        this.messageColor = messageColor;
         return this;
     }
 
@@ -595,19 +600,14 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    public HelpOverlayConfiguration setCutoutRadiusResource(@DimenRes @Dimension(unit = Dimension.DP) Integer cutoutRadiusResource) {
-        this.cutoutRadiusResource = cutoutRadiusResource;
-        return this;
-    }
-
     @DimenRes
     @Dimension(unit = Dimension.DP)
     public Integer getCutoutRadiusResource() {
         return cutoutRadiusResource;
     }
 
-    public HelpOverlayConfiguration setInfoMarginResource(@DimenRes Integer infoMarginResource) {
-        this.infoMarginResource = infoMarginResource;
+    public HelpOverlayConfiguration setCutoutRadiusResource(@DimenRes @Dimension(unit = Dimension.DP) Integer cutoutRadiusResource) {
+        this.cutoutRadiusResource = cutoutRadiusResource;
         return this;
     }
 
@@ -616,9 +616,8 @@ public class HelpOverlayConfiguration {
         return infoMarginResource;
     }
 
-
-    public HelpOverlayConfiguration setButtonTextResourceLeft(@StringRes Integer res) {
-        buttonTextResourceLeft = res;
+    public HelpOverlayConfiguration setInfoMarginResource(@DimenRes Integer infoMarginResource) {
+        this.infoMarginResource = infoMarginResource;
         return this;
     }
 
@@ -627,8 +626,8 @@ public class HelpOverlayConfiguration {
         return buttonTextResourceLeft;
     }
 
-    public HelpOverlayConfiguration setButtonTextResourceRight(@StringRes Integer res) {
-        buttonTextResourceRight = res;
+    public HelpOverlayConfiguration setButtonTextResourceLeft(@StringRes Integer res) {
+        buttonTextResourceLeft = res;
         return this;
     }
 
@@ -637,8 +636,26 @@ public class HelpOverlayConfiguration {
         return buttonTextResourceRight;
     }
 
-    public HelpOverlayConfiguration setButtonTextLeft(String res) {
-        buttonTextLeft = res;
+    public HelpOverlayConfiguration setButtonTextResourceRight(@StringRes Integer res) {
+        buttonTextResourceRight = res;
+        return this;
+    }
+
+    public Visibility getButtonVisibilityRight() {
+        return buttonVisibilityRight;
+    }
+
+    public HelpOverlayConfiguration setButtonVisibilityRight(Visibility visibility) {
+        buttonVisibilityRight = visibility;
+        return this;
+    }
+
+    public Visibility getButtonVisibilityLeft() {
+        return buttonVisibilityLeft;
+    }
+
+    public HelpOverlayConfiguration setButtonVisibilityLeft(Visibility visibility) {
+        buttonVisibilityLeft = visibility;
         return this;
     }
 
@@ -646,12 +663,23 @@ public class HelpOverlayConfiguration {
         return buttonTextLeft;
     }
 
-    public HelpOverlayConfiguration setButtonTextRight(String res) {
-        buttonTextRight = res;
+    public HelpOverlayConfiguration setButtonTextLeft(String res) {
+        buttonTextLeft = res;
         return this;
     }
 
     public String getButtonTextRight() {
         return buttonTextRight;
+    }
+
+    public HelpOverlayConfiguration setButtonTextRight(String res) {
+        buttonTextRight = res;
+        return this;
+    }
+
+    //Visible states for Left and Right Button
+    public enum Visibility {
+        VISIBLE,
+        GONE
     }
 }

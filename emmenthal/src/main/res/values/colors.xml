@@ -4,4 +4,6 @@
     <color name="overlayTitleColor">#fff</color>
     <color name="overlayMessageColor">#fff</color>
     <color name="overlayDot">#fff</color>
+    <color name="overlayButtonRightTextColor">#fff</color>
+    <color name="overlayButtonLeftTextColor">#fff</color>
 </resources>
