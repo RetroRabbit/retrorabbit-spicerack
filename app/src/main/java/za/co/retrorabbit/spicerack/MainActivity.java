@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 .setButtonTextResourceLeft(android.R.string.yes)
                 .setButtonTextResourceRight(android.R.string.no)
                 .setButtonVisibilityRight(HelpOverlayConfiguration.Visibility.VISIBLE)
-                .setButtonVisibilityLeft(HelpOverlayConfiguration.Visibility.GONE);
+                .setButtonVisibilityLeft(HelpOverlayConfiguration.Visibility.VISIBLE);
     }
 
     @Override

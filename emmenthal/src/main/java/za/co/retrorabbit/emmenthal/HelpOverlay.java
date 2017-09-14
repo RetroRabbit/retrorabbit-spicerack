@@ -693,7 +693,7 @@ public class HelpOverlay extends RelativeLayout {
         if (color == Color.TRANSPARENT)
             buttonRight.setBackground(null);
         else
-            buttonRight.getBackground().setColorFilter(color, PorterDuff.Mode.SRC);
+            buttonRight.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     public void setButtonColorLeft(@ColorInt int color) {
