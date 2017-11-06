@@ -3,16 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/emmenthal/emmenthal.iml" filepath="$PROJECT_DIR$/emmenthal/emmenthal.iml" />
       <module fileurl="file://$PROJECT_DIR$/emmenthal/emmenthal.iml" filepath="$PROJECT_DIR$/emmenthal/emmenthal.iml" />
       <module fileurl="file://$PROJECT_DIR$/habanero/habanero.iml" filepath="$PROJECT_DIR$/habanero/habanero.iml" />
-      <module fileurl="file://$PROJECT_DIR$/habanero/habanero.iml" filepath="$PROJECT_DIR$/habanero/habanero.iml" />
-      <module fileurl="file://$PROJECT_DIR$/paprika/paprika.iml" filepath="$PROJECT_DIR$/paprika/paprika.iml" />
       <module fileurl="file://$PROJECT_DIR$/paprika/paprika.iml" filepath="$PROJECT_DIR$/paprika/paprika.iml" />
       <module fileurl="file://$PROJECT_DIR$/retrorabbit-spicerack.iml" filepath="$PROJECT_DIR$/retrorabbit-spicerack.iml" />
-      <module fileurl="file://$PROJECT_DIR$/retrorabbit-spicerack.iml" filepath="$PROJECT_DIR$/retrorabbit-spicerack.iml" />
-      <module fileurl="file://$PROJECT_DIR$/salt/salt.iml" filepath="$PROJECT_DIR$/salt/salt.iml" />
       <module fileurl="file://$PROJECT_DIR$/salt/salt.iml" filepath="$PROJECT_DIR$/salt/salt.iml" />
     </modules>
   </component>

@@ -48,7 +48,7 @@ public class ListOverlayActivity extends Activity {
                                 Toast.makeText(v.getContext(), "RIGHT", Toast.LENGTH_SHORT).show();
                             }
                         })
-                        .setConfiguration(MainActivity.getDefaultConfiguration().setDelayBeforeShow(2000))
+                        .setConfiguration(MainActivity.getDefaultConfiguration().setDelayBeforeShow(100))
                         .setUsageId("list_item") //THIS SHOULD BE UNIQUE ID
                         .show(R.id.imageview_item, R.id.list_frame, recyclerView, 1);
             }

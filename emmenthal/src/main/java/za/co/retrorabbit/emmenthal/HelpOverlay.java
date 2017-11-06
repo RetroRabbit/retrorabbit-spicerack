@@ -150,35 +150,44 @@ public class HelpOverlay extends RelativeLayout {
      * Set to the Stroke Color
      */
     @ColorInt
-    private Integer strokeColor;
+    private int strokeColor;
     /**
      * Set to the Cutout Radius
      */
     @ColorInt
-    private Integer cutoutRadius;
+    private int cutoutRadius;
     /**
      * Set to the Dot Color
      */
     @ColorInt
-    private Integer dotColor;
+    private int dotColor;
     /**
      * Set to the Cutout Stroke Size
      */
     @Dimension(unit = Dimension.PX)
-    private Integer cutoutStrokeSize;
+    private int cutoutStrokeSize;
     /**
      * Set to the Cutout Color
      */
-    private Integer cutoutColor;
+    private int cutoutColor;
     /**
      * Set to the Dot Size
      */
     @Dimension(unit = Dimension.PX)
-    private Integer dotSize;
+    private int dotSize;
     /**
      * Set to the Info Section Marging from Cutout
      */
-    private Integer infoMargin;
+    private int infoMargin;
+
+
+    /**
+     * Touch Even Variables
+     */
+    float xT,yT ;
+    int xV, yV,radius ;
+    double dx ,dy;
+    boolean isTouchOnFocus ;
     /**
      * Set to the left and right button click listeners
      */
@@ -213,18 +222,18 @@ public class HelpOverlay extends RelativeLayout {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float xT = event.getX();
-        float yT = event.getY();
+          xT = event.getX();
+          yT = event.getY();
 
-        int xV = circleShape.getPoint().x;
-        int yV = circleShape.getPoint().y;
+          xV = circleShape.getPoint().x;
+          yV = circleShape.getPoint().y;
 
-        int radius = circleShape.getRadius();
+          radius = circleShape.getRadius();
 
-        double dx = Math.pow(xT - xV, 2);
-        double dy = Math.pow(yT - yV, 2);
+          dx = Math.pow(xT - xV, 2);
+          dy = Math.pow(yT - yV, 2);
 
-        boolean isTouchOnFocus = (dx + dy) <= Math.pow(radius, 2);
+          isTouchOnFocus = (dx + dy) <= Math.pow(radius, 2);
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -300,51 +309,51 @@ public class HelpOverlay extends RelativeLayout {
         setMessageText(configuration.getMessageText());
 
         //Configure Mask Color
-        if (configuration.getMaskColor() != null) {
+        if (configuration.getMaskColor() != 0) {
             maskColor = configuration.getMaskColor();
-        } else if (configuration.getOverlayColorResource() != null) {
+        } else if (configuration.getOverlayColorResource() != 0) {
             maskColor = ResourcesCompat.getColor(getContext().getResources(), configuration.getOverlayColorResource(), getContext().getTheme());
         }
 
         //Configure Left Button Color
-        if (configuration.getButtonColorLeft() != null) {
+        if (configuration.getButtonColorLeft() != 0) {
             setButtonColorLeft(configuration.getButtonColorLeft());
-        } else if (configuration.getButtonColorResourceLeft() != null) {
+        } else if (configuration.getButtonColorResourceLeft() != 0) {
             setButtonColorLeft(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonColorResourceLeft(), getContext().getTheme()));
         }
 
         //Configure Left Button Text
         if (configuration.getButtonTextLeft() != null) {
             setButtonTextLeft(configuration.getButtonTextLeft());
-        } else if (configuration.getButtonTextResourceLeft() != null) {
+        } else if (configuration.getButtonTextResourceLeft() != 0) {
             setButtonTextLeft(configuration.getButtonTextResourceLeft());
         }
 
         //Configure Right Button Text
         if (configuration.getButtonTextRight() != null) {
             setButtonTextRight(configuration.getButtonTextRight());
-        } else if (configuration.getButtonTextResourceRight() != null) {
+        } else if (configuration.getButtonTextResourceRight() != 0) {
             setButtonTextRight(configuration.getButtonTextResourceRight());
         }
 
         //Configure Right Button Color
-        if (configuration.getButtonColorRight() != null) {
+        if (configuration.getButtonColorRight() != 0) {
             setButtonColorRight(configuration.getButtonColorRight());
-        } else if (configuration.getButtonColorResourceRight() != null) {
+        } else if (configuration.getButtonColorResourceRight() != 0) {
             setButtonColorRight(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonColorResourceRight(), getContext().getTheme()));
         }
 
         //Configure Left Button Text Color
-        if (configuration.getButtonTextColorLeft() != null) {
+        if (configuration.getButtonTextColorLeft() != 0) {
             setButtonTextColorLeft(configuration.getButtonTextColorLeft());
-        } else if (configuration.getButtonTextColorResourceLeft() != null) {
+        } else if (configuration.getButtonTextColorResourceLeft() != 0) {
             setButtonTextColorLeft(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonTextColorResourceLeft(), getContext().getTheme()));
         }
 
         //Configure Right Button Text Color
-        if (configuration.getButtonTextColorRight() != null) {
+        if (configuration.getButtonTextColorRight() != 0) {
             setButtonTextColorRight(configuration.getButtonTextColorRight());
-        } else if (configuration.getButtonTextColorResourceRight() != null) {
+        } else if (configuration.getButtonTextColorResourceRight() != 0) {
             setButtonTextColorRight(ResourcesCompat.getColor(getContext().getResources(), configuration.getButtonTextColorResourceRight(), getContext().getTheme()));
         }
 
@@ -359,65 +368,65 @@ public class HelpOverlay extends RelativeLayout {
         }
 
         //Configure Title Text Color
-        if (configuration.getTitleColor() != null) {
+        if (configuration.getTitleColor() != 0) {
             setTitleTextColor(configuration.getTitleColor());
-        } else if (configuration.getTitleResourceColor() != null) {
+        } else if (configuration.getTitleResourceColor() != 0) {
             setTitleTextColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getTitleResourceColor(), getContext().getTheme()));
         }
 
         //Configure Message Text Color
-        if (configuration.getMessageColor() != null) {
+        if (configuration.getMessageColor() != 0) {
             setMessageTextColor(configuration.getMessageColor());
-        } else if (configuration.getMessageResourceColor() != null) {
+        } else if (configuration.getMessageResourceColor() != 0) {
             setMessageTextColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getMessageResourceColor(), getContext().getTheme()));
         }
 
         //Configure Cutout Color
-        if (configuration.getCutoutColor() != null) {
+        if (configuration.getCutoutColor() != 0) {
             setCutoutColor(configuration.getCutoutColor());
-        } else if (configuration.getCutoutColorResource() != null) {
+        } else if (configuration.getCutoutColorResource() != 0) {
             setCutoutColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getCutoutColorResource(), getContext().getTheme()));
         }
 
         //Configure Stroke Color
-        if (configuration.getStrokeColor() != null) {
+        if (configuration.getStrokeColor() != 0) {
             setStrokeColor(configuration.getStrokeColor());
-        } else if (configuration.getStrokeColorResource() != null) {
+        } else if (configuration.getStrokeColorResource() != 0) {
             setStrokeColor(ResourcesCompat.getColor(getContext().getResources(), configuration.getStrokeColorResource(), getContext().getTheme()));
         }
 
         //Configure Cutout Radius
-        if (configuration.getCutoutRadius() != null) {
+        if (configuration.getCutoutRadius() != 0) {
             setCutoutRadius(configuration.getCutoutRadius());
-        } else if (configuration.getCutoutRadiusResource() != null) {
+        } else if (configuration.getCutoutRadiusResource() != 0) {
             setCutoutRadius(getContext().getResources().getDimensionPixelSize(configuration.getCutoutRadiusResource()));
         }
 
         //Configure Cutout Stroke Size
-        if (configuration.getCutoutStrokeSize() != null) {
+        if (configuration.getCutoutStrokeSize() != 0) {
             setCutoutStrokeSize(configuration.getCutoutStrokeSize());
-        } else if (configuration.getCutoutStrokeSizeResource() != null) {
+        } else if (configuration.getCutoutStrokeSizeResource() != 0) {
             setCutoutStrokeSize(getContext().getResources().getDimensionPixelSize(configuration.getCutoutStrokeSizeResource()));
         }
 
         //Configure Dot Color
-        if (configuration.getDotColor() != null) {
+        if (configuration.getDotColor() != 0) {
             setDotColor(configuration.getDotColor());
-        } else if (configuration.getDotColorResource() != null) {
+        } else if (configuration.getDotColorResource() != 0) {
             setDotColor(ContextCompat.getColor(getContext(), configuration.getDotColorResource()));
         }
 
         //Configure Dot Size
-        if (configuration.getDotSize() != null) {
+        if (configuration.getDotSize() != 0) {
             setDotSize(configuration.getDotSize());
-        } else if (configuration.getDotSizeResource() != null) {
+        } else if (configuration.getDotSizeResource() != 0) {
             setDotSize(getContext().getResources().getDimensionPixelSize(configuration.getDotSizeResource()));
         }
 
         //Configure Info Margin
-        if (configuration.getInfoMargin() != null) {
+        if (configuration.getInfoMargin() != 0) {
             setInfoMargin(configuration.getInfoMargin());
-        } else if (configuration.getInfoMarginResource() != null) {
+        } else if (configuration.getInfoMarginResource() != 0) {
             setInfoMargin(getContext().getResources().getDimensionPixelSize(configuration.getInfoMarginResource()));
         }
 
@@ -605,6 +614,13 @@ public class HelpOverlay extends RelativeLayout {
                     AnimationFactory.performAnimation(dotView);
             }
         });
+    }
+
+    /**
+     * SETTERS
+     */
+    private void setReady(boolean isReady) {
+        this.isReady = isReady;
     }    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -638,13 +654,6 @@ public class HelpOverlay extends RelativeLayout {
         circleShape.draw(this.canvas, eraser, cutoutRadius);
 
         canvas.drawBitmap(bitmap, 0, 0, null);
-    }
-
-    /**
-     * SETTERS
-     */
-    private void setReady(boolean isReady) {
-        this.isReady = isReady;
     }
 
     private void setTarget(Target target) {
@@ -775,27 +784,27 @@ public class HelpOverlay extends RelativeLayout {
         );
     }
 
-    public void setCutoutRadius(Integer cutoutRadius) {
+    public void setCutoutRadius(int cutoutRadius) {
         this.cutoutRadius = cutoutRadius;
     }
 
-    public void setDotColor(Integer dotColor) {
+    public void setDotColor(int dotColor) {
         this.dotColor = dotColor;
     }
 
-    public void setCutoutStrokeSize(Integer cutoutStrokeSize) {
+    public void setCutoutStrokeSize(int cutoutStrokeSize) {
         this.cutoutStrokeSize = cutoutStrokeSize;
     }
 
-    public void setCutoutColor(Integer cutoutColor) {
+    public void setCutoutColor(int cutoutColor) {
         this.cutoutColor = cutoutColor;
     }
 
-    public void setDotSize(Integer dotSize) {
+    public void setDotSize(int dotSize) {
         this.dotSize = dotSize;
     }
 
-    public void setInfoMargin(Integer infoMargin) {
+    public void setInfoMargin(int infoMargin) {
         this.infoMargin = infoMargin;
     }
 
