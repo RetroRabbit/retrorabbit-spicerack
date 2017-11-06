@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.Dimension;
 import android.support.annotation.FloatRange;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.util.Log;
@@ -30,28 +31,28 @@ public class HelpOverlayConfiguration {
      * Title Font Style
      */
     @StyleRes
-    private Integer titleStyle;
+    private int titleStyle;
     /**
      * Message Font Style
      */
     @StyleRes
-    private Integer messageStyle;
+    private int messageStyle;
     /**
      * HelpOverlay will start
      * showing after delayMillis seconds
      * passed
      */
-    private Integer delayBeforeShow;
+    private int delayBeforeShow;
     /**
      * Mask Color
      */
     @ColorInt
-    private Integer maskColor;
+    private int maskColor;
     /**
      * Mask Color Resource
      */
     @ColorRes
-    private Integer maskColorResource;
+    private int maskColorResource;
     /**
      * Show/Dismiss HelpOverlay
      * with fade in/out animation if
@@ -65,15 +66,15 @@ public class HelpOverlayConfiguration {
     /**
      * circleShape color
      */
-    private Integer cutoutColor;
+    private int cutoutColor;
     /**
      * Stroke Color Resource
      */
-    private Integer strokeColorResource;
+    private int strokeColorResource;
     /**
      * Cutout Stroke Color
      */
-    private Integer strokeColor;
+    private int strokeColor;
     /**
      * Cutout Stroke Alpha Color
      */
@@ -93,11 +94,11 @@ public class HelpOverlayConfiguration {
     /**
      * Help Dialog Title text color
      */
-    private Integer titleColor;
+    private int titleColor;
     /**
      * Help Dialog Message text color
      */
-    private Integer messageColor;
+    private int messageColor;
     /**
      * Dot View will be shown if
      * this is true
@@ -106,15 +107,15 @@ public class HelpOverlayConfiguration {
     /**
      * Dot View Color
      */
-    private Integer dotColor;
+    private int dotColor;
     /**
      * Dot View Diameter
      */
-    private Integer dotSize;
+    private int dotSize;
     /**
      * Dot View Diameter Resource
      */
-    private Integer dotSizeResource;
+    private int dotSizeResource;
     /**
      * Perform click operation to target
      * if this is true
@@ -124,43 +125,43 @@ public class HelpOverlayConfiguration {
      * Left or Right Button color
      */
     @ColorInt
-    private Integer buttonColorLeft, buttonColorRight;
+    private int buttonColorLeft, buttonColorRight;
     /**
      * Left or Right Button Color Resource
      */
     @ColorRes
-    private Integer buttonColorResourceLeft, buttonColorResourceRight;
+    private int buttonColorResourceLeft, buttonColorResourceRight;
     /**
      * Left or Right Button Text Color
      */
     @ColorInt
-    private Integer buttonTextColorLeft, buttonTextColorRight;
+    private int buttonTextColorLeft, buttonTextColorRight;
     /**
      * Left or Right Button Text Color
      */
     @ColorRes
-    private Integer buttonTextColorResourceLeft, buttonTextColorResourceRight;
+    private int buttonTextColorResourceLeft, buttonTextColorResourceRight;
     /**
      * Title or Message Color Resource
      */
     @ColorRes
-    private Integer titleResourceColor, messageResourceColor;
+    private int titleResourceColor, messageResourceColor;
 
     /**
      * Current Visible state for Left and Right Button
      */
     private Visibility buttonVisibilityLeft, buttonVisibilityRight;
 
-    private Integer cutoutRadius;
-    private Integer cutoutStroke;
-    private Integer infoMargin;
-    private Integer cutoutRadiusResource;
-    private Integer cutoutStrokeSizeResource;
-    private Integer dotColorResource;
-    private Integer cutoutColorResource;
-    private Integer infoMarginResource;
-    private Integer buttonTextResourceLeft;
-    private Integer buttonTextResourceRight;
+    private int cutoutRadius;
+    private int cutoutStroke;
+    private int infoMargin;
+    private int cutoutRadiusResource;
+    private int cutoutStrokeSizeResource;
+    private int dotColorResource;
+    private int cutoutColorResource;
+    private int infoMarginResource;
+    private int buttonTextResourceLeft;
+    private int buttonTextResourceRight;
     private String buttonTextLeft;
     private String buttonTextRight;
 
@@ -193,7 +194,7 @@ public class HelpOverlayConfiguration {
     }
 
     @StyleRes
-    public Integer getMessageStyle() {
+    public int getMessageStyle() {
         return messageStyle;
     }
 
@@ -203,7 +204,7 @@ public class HelpOverlayConfiguration {
     }
 
     @StyleRes
-    public Integer getTitleStyle() {
+    public int getTitleStyle() {
         return titleStyle;
     }
 
@@ -231,40 +232,40 @@ public class HelpOverlayConfiguration {
     }
 
     @ColorInt
-    public Integer getCutoutColor() {
+    public int getCutoutColor() {
         return cutoutColor;
     }
 
-    public HelpOverlayConfiguration setCutoutColor(@ColorInt Integer cutoutColor) {
+    public HelpOverlayConfiguration setCutoutColor(@ColorInt int cutoutColor) {
         this.cutoutColor = cutoutColor;
         return this;
     }
 
     @ColorRes
-    public Integer getCutoutColorResource() {
+    public int getCutoutColorResource() {
         return cutoutColorResource;
     }
 
-    public HelpOverlayConfiguration setCutoutColorResource(@ColorRes Integer cutoutColorResource) {
+    public HelpOverlayConfiguration setCutoutColorResource(@ColorRes int cutoutColorResource) {
         this.cutoutColorResource = cutoutColorResource;
         return this;
     }
 
     @ColorInt
-    public Integer getStrokeColor() {
+    public int getStrokeColor() {
         return strokeColor;
     }
 
-    public HelpOverlayConfiguration setStrokeColor(@ColorInt Integer strokeColor) {
+    public HelpOverlayConfiguration setStrokeColor(@ColorInt int strokeColor) {
         this.strokeColor = strokeColor;
-        if (this.strokeColorResource != null) {
+        if (this.strokeColorResource != 0) {
             Log.w(TAG, "Can't set both strokeColor and strokeColorResource, strokeColorResource will be ignored");
-            this.strokeColorResource = null;
+            this.strokeColorResource = 0;
         }
         return this;
     }
 
-    public HelpOverlayConfiguration setCutoutStrokeColorResource(@ColorRes Integer strokeColor, @FloatRange(from = 0f, to = 1f) float alpha) {
+    public HelpOverlayConfiguration setCutoutStrokeColorResource(@ColorRes int strokeColor, @FloatRange(from = 0f, to = 1f) float alpha) {
         setCutoutStrokeColorResource(strokeColor);
         setStrokeAlpha(alpha);
         return this;
@@ -279,15 +280,15 @@ public class HelpOverlayConfiguration {
     }
 
     @ColorRes
-    public Integer getStrokeColorResource() {
+    public int getStrokeColorResource() {
         return strokeColorResource;
     }
 
-    public HelpOverlayConfiguration setCutoutStrokeColorResource(@ColorRes Integer strokeResourceColor) {
+    public HelpOverlayConfiguration setCutoutStrokeColorResource(@ColorRes int strokeResourceColor) {
         this.strokeColorResource = strokeResourceColor;
-        if (this.strokeColor != null) {
+        if (this.strokeColor != 0) {
             Log.w(TAG, "Can't set both strokeColorResource and strokeColor, strokeColor will be ignored");
-            this.strokeColor = null;
+            this.strokeColor = 0;
         }
         return this;
     }
@@ -319,7 +320,7 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    public Integer getMessageResourceColor() {
+    public int getMessageResourceColor() {
         return messageResourceColor;
     }
 
@@ -338,56 +339,56 @@ public class HelpOverlayConfiguration {
     }
 
     @ColorInt
-    public Integer getDotColor() {
+    public int getDotColor() {
         return dotColor;
     }
 
-    public HelpOverlayConfiguration setDotColor(@ColorInt Integer dotColor) {
+    public HelpOverlayConfiguration setDotColor(@ColorInt int dotColor) {
         this.dotColor = dotColor;
         return this;
     }
 
     @ColorRes
-    public Integer getDotColorResource() {
+    public int getDotColorResource() {
         return dotColorResource;
     }
 
-    public HelpOverlayConfiguration setDotColorResource(@ColorRes Integer dotColorResource) {
+    public HelpOverlayConfiguration setDotColorResource(@ColorRes int dotColorResource) {
         this.dotColorResource = dotColorResource;
         return this;
     }
 
     @Dimension(unit = Dimension.PX)
-    public Integer getDotSize() {
+    public int getDotSize() {
         return dotSize;
     }
 
-    public HelpOverlayConfiguration setDotSize(@Dimension(unit = Dimension.PX) Integer dotSize) {
+    public HelpOverlayConfiguration setDotSize(@Dimension(unit = Dimension.PX) int dotSize) {
         this.dotSize = dotSize;
         return this;
     }
 
     @DimenRes
-    public Integer getDotSizeResource() {
+    public int getDotSizeResource() {
         return dotSizeResource;
     }
 
-    public HelpOverlayConfiguration setDotSizeResource(@DimenRes Integer dotSizeResource) {
+    public HelpOverlayConfiguration setDotSizeResource(@DimenRes int dotSizeResource) {
         this.dotSizeResource = dotSizeResource;
         return this;
     }
 
     @Dimension(unit = Dimension.PX)
-    public Integer getCutoutStrokeSize() {
+    public int getCutoutStrokeSize() {
         return cutoutStroke;
     }
 
-    public HelpOverlayConfiguration setCutoutStrokeSize(@Dimension(unit = Dimension.PX) Integer size) {
+    public HelpOverlayConfiguration setCutoutStrokeSize(@Dimension(unit = Dimension.PX) int size) {
         this.cutoutStroke = Utils.dpToPx(size);
         return this;
     }
 
-    public Integer getCutoutStrokeSizeResource() {
+    public int getCutoutStrokeSizeResource() {
         return cutoutStrokeSizeResource;
     }
 
@@ -396,7 +397,7 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    public Integer getDelayBeforeShow() {
+    public int getDelayBeforeShow() {
         return delayBeforeShow;
     }
 
@@ -406,66 +407,66 @@ public class HelpOverlayConfiguration {
     }
 
     @ColorInt
-    public Integer getMaskColor() {
+    public int getMaskColor() {
         return maskColor;
     }
 
-    public HelpOverlayConfiguration setMaskColor(Integer maskColor) {
+    public HelpOverlayConfiguration setMaskColor(int maskColor) {
         this.maskColor = maskColor;
-        if (this.maskColorResource != null) {
+        if (this.maskColorResource != 0) {
             Log.w(TAG, "Can't set both maskColorResource and maskColor, maskColorResource will be ignored");
-            this.maskColorResource = null;
+            this.maskColorResource = 0;
         }
         return this;
     }
 
     @ColorRes
-    public Integer getOverlayColorResource() {
+    public int getOverlayColorResource() {
         return maskColorResource;
     }
 
-    public HelpOverlayConfiguration setOverlayColorResource(Integer maskColorResource) {
+    public HelpOverlayConfiguration setOverlayColorResource(int maskColorResource) {
         this.maskColorResource = maskColorResource;
-        if (this.maskColor != null) {
+        if (this.maskColor != 0) {
             Log.w(TAG, "Can't set both maskColor and maskColorResource, maskColor will be ignored");
-            this.maskColor = null;
+            this.maskColor = 0;
         }
         return this;
     }
 
     @ColorInt
-    public Integer getTitleColor() {
+    public int getTitleColor() {
         return titleColor;
     }
 
-    public HelpOverlayConfiguration setTitleColor(@ColorInt Integer titleColor) {
+    public HelpOverlayConfiguration setTitleColor(@ColorInt int titleColor) {
         this.titleColor = titleColor;
-        if (this.titleResourceColor != null) {
+        if (this.titleResourceColor != 0) {
             Log.w(TAG, "Can't set both titleColor and titleResourceColor, titleResourceColor will be ignored");
-            this.titleResourceColor = null;
+            this.titleResourceColor = 0;
         }
         return this;
     }
 
     @ColorRes
-    public Integer getTitleResourceColor() {
+    public int getTitleResourceColor() {
         return titleResourceColor;
     }
 
-    public HelpOverlayConfiguration setTitleResourceColor(@ColorRes Integer titleColor) {
+    public HelpOverlayConfiguration setTitleResourceColor(@ColorRes int titleColor) {
         this.titleResourceColor = titleColor;
-        if (this.titleColor != null) {
+        if (this.titleColor != 0) {
             Log.w(TAG, "Can't set both titleResourceColor and titleColor, titleColor will be ignored");
-            this.titleColor = null;
+            this.titleColor = 0;
         }
         return this;
     }
 
-    public Integer getMessageColor() {
+    public int getMessageColor() {
         return messageColor;
     }
 
-    public HelpOverlayConfiguration setMessageColor(Integer messageColor) {
+    public HelpOverlayConfiguration setMessageColor(@ColorInt int messageColor) {
         this.messageColor = messageColor;
         return this;
     }
@@ -479,109 +480,109 @@ public class HelpOverlayConfiguration {
         return this;
     }
 
-    public Integer getButtonColorLeft() {
+    public int getButtonColorLeft() {
         return buttonColorLeft;
     }
 
-    public HelpOverlayConfiguration setButtonColorLeft(@ColorInt Integer color) {
+    public HelpOverlayConfiguration setButtonColorLeft(@ColorInt int color) {
         this.buttonColorLeft = color;
         return this;
     }
 
     @ColorInt
-    public Integer getButtonColorRight() {
+    public int getButtonColorRight() {
         return buttonColorRight;
     }
 
-    public HelpOverlayConfiguration setButtonColorRight(@ColorInt Integer color) {
+    public HelpOverlayConfiguration setButtonColorRight(@ColorInt int color) {
         this.buttonColorRight = color;
         return this;
     }
 
     @ColorRes
-    public Integer getButtonColorResourceLeft() {
+    public int getButtonColorResourceLeft() {
         return buttonColorResourceLeft;
     }
 
-    public HelpOverlayConfiguration setButtonColorResourceLeft(@ColorRes Integer color) {
+    public HelpOverlayConfiguration setButtonColorResourceLeft(@ColorRes int color) {
         this.buttonColorResourceLeft = color;
-        if (this.buttonColorLeft != null) {
+        if (this.buttonColorLeft != 0) {
             Log.w(TAG, "Can't set both buttonColorLeft and buttonColorResourceLeft, buttonColorLeft will be ignored");
-            this.buttonColorLeft = null;
+            this.buttonColorLeft = 0;
         }
         return this;
     }
 
-    public Integer getButtonColorResourceRight() {
+    public int getButtonColorResourceRight() {
         return buttonColorResourceRight;
     }
 
-    public HelpOverlayConfiguration setButtonColorResourceRight(@ColorRes Integer color) {
+    public HelpOverlayConfiguration setButtonColorResourceRight(@ColorRes int color) {
         this.buttonColorResourceRight = color;
-        if (this.buttonColorRight != null) {
+        if (this.buttonColorRight != 0) {
             Log.w(TAG, "Can't set both buttonColorRight and buttonColorResourceRight, buttonColorRight will be ignored");
-            this.buttonColorRight = null;
+            this.buttonColorRight = 0;
         }
         return this;
     }
 
     @ColorInt
-    public Integer getButtonTextColorLeft() {
+    public int getButtonTextColorLeft() {
         return buttonTextColorLeft;
     }
 
-    public HelpOverlayConfiguration setButtonTextColorLeft(@ColorInt Integer buttonTextColorLeft) {
+    public HelpOverlayConfiguration setButtonTextColorLeft(@ColorInt int buttonTextColorLeft) {
         this.buttonTextColorLeft = buttonTextColorLeft;
-        if (this.buttonTextColorResourceLeft != null) {
+        if (this.buttonTextColorResourceLeft != 0) {
             Log.w(TAG, "Can't set both buttonTextColorLeft and buttonTextColorResourceLeft, buttonTextColorResourceLeft will be ignored");
-            this.buttonTextColorResourceLeft = null;
+            this.buttonTextColorResourceLeft = 0;
         }
         return this;
     }
 
     @ColorInt
-    public Integer getButtonTextColorRight() {
+    public int getButtonTextColorRight() {
         return buttonTextColorRight;
     }
 
-    public HelpOverlayConfiguration setButtonTextColorRight(@ColorInt Integer buttonTextColorRight) {
+    public HelpOverlayConfiguration setButtonTextColorRight(@ColorInt int buttonTextColorRight) {
         this.buttonTextColorRight = buttonTextColorRight;
-        if (this.buttonTextColorResourceRight != null) {
+        if (this.buttonTextColorResourceRight != 0) {
             Log.w(TAG, "Can't set both buttonTextColorRight and buttonTextColorResourceRight, buttonTextColorResourceRight will be ignored");
-            this.buttonTextColorResourceRight = null;
+            this.buttonTextColorResourceRight = 0;
         }
         return this;
     }
 
     @ColorRes
-    public Integer getButtonTextColorResourceLeft() {
+    public int getButtonTextColorResourceLeft() {
         return buttonTextColorResourceLeft;
     }
 
-    public HelpOverlayConfiguration setButtonTextColorResourceLeft(@ColorRes Integer buttonTextColorResourceLeft) {
+    public HelpOverlayConfiguration setButtonTextColorResourceLeft(@ColorRes int buttonTextColorResourceLeft) {
         this.buttonTextColorResourceLeft = buttonTextColorResourceLeft;
-        if (this.buttonTextColorLeft != null) {
+        if (this.buttonTextColorLeft != 0) {
             Log.w(TAG, "Can't set both buttonTextColorResourceLeft and buttonTextColorLeft, buttonTextColorLeft will be ignored");
-            this.buttonTextColorLeft = null;
+            this.buttonTextColorLeft = 0;
         }
         return this;
     }
 
     @ColorRes
-    public Integer getButtonTextColorResourceRight() {
+    public int getButtonTextColorResourceRight() {
         return buttonTextColorResourceRight;
     }
 
-    public HelpOverlayConfiguration setButtonTextColorResourceRight(@ColorRes Integer buttonTextColorResourceRight) {
+    public HelpOverlayConfiguration setButtonTextColorResourceRight(@ColorRes int buttonTextColorResourceRight) {
         this.buttonTextColorResourceRight = buttonTextColorResourceRight;
-        if (this.buttonTextColorRight != null) {
+        if (this.buttonTextColorRight != 0) {
             Log.w(TAG, "Can't set both buttonTextColorResourceRight and buttonTextColorRight, buttonTextColorRight will be ignored");
-            this.buttonTextColorRight = null;
+            this.buttonTextColorRight = 0;
         }
         return this;
     }
 
-    public Integer getInfoMargin() {
+    public int getInfoMargin() {
         return infoMargin;
     }
 
@@ -591,52 +592,52 @@ public class HelpOverlayConfiguration {
     }
 
     @Dimension(unit = Dimension.PX)
-    public Integer getCutoutRadius() {
+    public int getCutoutRadius() {
         return cutoutRadius;
     }
 
-    public HelpOverlayConfiguration setCutoutRadius(@Dimension(unit = Dimension.PX) Integer size) {
+    public HelpOverlayConfiguration setCutoutRadius(@Dimension(unit = Dimension.PX) int size) {
         this.cutoutRadius = size;
         return this;
     }
 
     @DimenRes
     @Dimension(unit = Dimension.DP)
-    public Integer getCutoutRadiusResource() {
+    public int getCutoutRadiusResource() {
         return cutoutRadiusResource;
     }
 
-    public HelpOverlayConfiguration setCutoutRadiusResource(@DimenRes @Dimension(unit = Dimension.DP) Integer cutoutRadiusResource) {
+    public HelpOverlayConfiguration setCutoutRadiusResource(@DimenRes @Dimension(unit = Dimension.DP) int cutoutRadiusResource) {
         this.cutoutRadiusResource = cutoutRadiusResource;
         return this;
     }
 
     @DimenRes
-    public Integer getInfoMarginResource() {
+    public int getInfoMarginResource() {
         return infoMarginResource;
     }
 
-    public HelpOverlayConfiguration setInfoMarginResource(@DimenRes Integer infoMarginResource) {
+    public HelpOverlayConfiguration setInfoMarginResource(@DimenRes int infoMarginResource) {
         this.infoMarginResource = infoMarginResource;
         return this;
     }
 
     @StringRes
-    public Integer getButtonTextResourceLeft() {
+    public int getButtonTextResourceLeft() {
         return buttonTextResourceLeft;
     }
 
-    public HelpOverlayConfiguration setButtonTextResourceLeft(@StringRes Integer res) {
+    public HelpOverlayConfiguration setButtonTextResourceLeft(@StringRes int res) {
         buttonTextResourceLeft = res;
         return this;
     }
 
     @StringRes
-    public Integer getButtonTextResourceRight() {
+    public int getButtonTextResourceRight() {
         return buttonTextResourceRight;
     }
 
-    public HelpOverlayConfiguration setButtonTextResourceRight(@StringRes Integer res) {
+    public HelpOverlayConfiguration setButtonTextResourceRight(@StringRes int res) {
         buttonTextResourceRight = res;
         return this;
     }
